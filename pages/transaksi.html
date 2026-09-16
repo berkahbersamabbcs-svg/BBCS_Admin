@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+BBCS - Transaksi Umum
+</title>
+
+
+<!-- =====================================
+     BBCS CSS
+===================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header>
+
+<h1>
+BERKAH BERSAMA
+</h1>
+
+<h2>
+Core System 
+</h2>
+
+<p>
+TRANSAKSI UMUM
+</p>
+
+</header>
+
+
+<!-- =====================================
+     MENU
+===================================== -->
+
+<div class="menu">
+
+<a href="../bbcs.html">
+🏠 Beranda
+</a>
+
+</div>
+
+
+<!-- =====================================
+     INPUT TRANSAKSI
+===================================== -->
+
+<h3>
+🔄 Input Transaksi
+</h3>
+
+
+<div class="form">
+
+
+<!-- =====================================
+     KATEGORI
+===================================== -->
+
+<label for="kategoriTransaksi">
+Kategori
+</label>
+
+
+<select
+    id="kategoriTransaksi"
+>
+
+<option value="">
+Pilih Kategori
+</option>
+
+<option value="Pemasukan">
+Pemasukan
+</option>
+
+<option value="Pengeluaran">
+Pengeluaran
+</option>
+
+</select>
+
+
+<!-- =====================================
+     NOMINAL
+===================================== -->
+
+<label for="jumlahTransaksi">
+Nominal
+</label>
+
+
+<input
+    id="jumlahTransaksi"
+    type="text"
+    inputmode="numeric"
+    placeholder="Jumlah transaksi"
+    oninput="formatJumlah(this)"
+    autocomplete="off"
+>
+
+
+<!-- =====================================
+     KETERANGAN
+===================================== -->
+
+<label for="keteranganTransaksi">
+Keterangan
+</label>
+
+
+<input
+    id="keteranganTransaksi"
+    type="text"
+    placeholder="Keterangan transaksi"
+    autocomplete="off"
+>
+
+
+<br>
+
+
+<!-- =====================================
+     SIMPAN
+===================================== -->
+
+<div class="aksi-form">
+
+<button
+    type="button"
+    class="btn-simpan"
+    onclick="simpanTransaksi()"
+>
+
+💾 SIMPAN TRANSAKSI
+
+</button>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================
+     CATATAN
+===================================== -->
+
+<div class="info">
+
+Tanggal transaksi dibuat otomatis oleh
+sistem saat transaksi disimpan.
+
+</div>
+
+
+<!-- =====================================
+     DATABASE CORE
+===================================== -->
+
+<script
+    src="../js/core/database.js">
+</script>
+
+
+<!-- =====================================
+     HAK AKSES
+===================================== -->
+
+<script
+    src="../js/auth/hakakses.js">
+</script>
+
+
+<!-- =====================================
+     MODUL TRANSAKSI
+===================================== -->
+
+<script
+    src="../js/transaksi/transaksi.js">
+</script>
+
+
+</body>
+
+</html>

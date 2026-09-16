@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Laporan BBCS</title>
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+<style>
+
+/* =====================================
+   LAPORAN BBCS - TAMPILAN BARU
+===================================== */
+
+body{
+    margin:0;
+    padding:12px;
+    background:#f2f5f9;
+    color:#222;
+    font-family:Arial, sans-serif;
+}
+
+.laporan-container{
+    width:100%;
+    max-width:1000px;
+    margin:0 auto;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.laporan-header{
+    background:#1f4e79;
+    color:white;
+    border-radius:14px;
+    padding:20px 15px;
+    text-align:center;
+    margin-bottom:15px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.12);
+}
+
+.laporan-header h1{
+    margin:0;
+    font-size:24px;
+}
+
+.laporan-header p{
+    margin:7px 0 0;
+    font-size:14px;
+    font-weight:bold;
+}
+
+
+/* =====================================
+   BERANDA
+===================================== */
+
+.tombol-beranda{
+    display:block;
+    background:white;
+    color:#1f4e79;
+    text-decoration:none;
+    text-align:center;
+    font-weight:bold;
+    padding:13px;
+    border-radius:10px;
+    border:1px solid #d5dce5;
+    margin-bottom:15px;
+}
+
+.tombol-beranda:active{
+    transform:scale(0.98);
+}
+
+
+/* =====================================
+   JUDUL MENU
+===================================== */
+
+.judul-menu{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:12px;
+    border:1px solid #dce2e8;
+}
+
+.judul-menu h2{
+    margin:0;
+    font-size:18px;
+    color:#1f4e79;
+}
+
+.judul-menu p{
+    margin:6px 0 0;
+    font-size:13px;
+    color:#666;
+}
+
+
+/* =====================================
+   MENU LAPORAN
+===================================== */
+
+.laporan-menu{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.laporan-menu button{
+    width:100%;
+    min-height:58px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:white;
+    color:#222;
+    border:1px solid #d9e0e7;
+    font-size:16px;
+    font-weight:bold;
+    text-align:left;
+    cursor:pointer;
+    box-shadow:0 2px 5px rgba(0,0,0,0.06);
+}
+
+.laporan-menu button:hover{
+    background:#eef4f9;
+}
+
+.laporan-menu button:active{
+    transform:scale(0.98);
+}
+
+
+/* =====================================
+   PANEL
+===================================== */
+
+.laporan-panel{
+    display:none;
+    margin-top:5px;
+}
+
+.laporan-panel.aktif{
+    display:block;
+}
+
+
+/* =====================================
+   KEPALA PANEL
+===================================== */
+
+.panel-header{
+    background:#1f4e79;
+    color:white;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:12px;
+}
+
+.panel-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.panel-header p{
+    margin:6px 0 0;
+    font-size:13px;
+}
+
+
+/* =====================================
+   TOMBOL KEMBALI
+===================================== */
+
+.tombol-kembali{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:none;
+    border-radius:10px;
+    background:white;
+    color:#1f4e79;
+    border:1px solid #d5dce5;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.tombol-kembali:active{
+    transform:scale(0.98);
+}
+
+
+/* =====================================
+   KARTU INFORMASI
+===================================== */
+
+.info{
+    background:white;
+    color:#222;
+    padding:15px;
+    margin-bottom:12px;
+    border-radius:12px;
+    border:1px solid #d9e0e7;
+    line-height:1.7;
+    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+}
+
+.info h3{
+    margin-top:0;
+    color:#1f4e79;
+}
+
+
+/* =====================================
+   RINGKASAN ANGSURAN
+===================================== */
+
+.ringkasan-angsuran{
+    background:white;
+    color:#222;
+    border:1px solid #d9e0e7;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.06);
+}
+
+.ringkasan-angsuran h3{
+    margin:0 0 12px;
+    color:#1f4e79;
+    font-size:17px;
+}
+
+.ringkasan-item{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 0;
+    border-bottom:1px solid #eee;
+}
+
+.ringkasan-item:last-child{
+    border-bottom:none;
+}
+
+.ringkasan-item span:first-child{
+    color:#555;
+}
+
+.ringkasan-item b{
+    color:#222;
+}
+
+
+/* =====================================
+   TABEL
+===================================== */
+
+.tabelLaporan{
+    width:100%;
+    overflow-x:auto;
+    background:white;
+    border-radius:12px;
+    border:1px solid #d9e0e7;
+    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+}
+
+.tabelLaporan table{
+    width:100%;
+    min-width:850px;
+    border-collapse:collapse;
+}
+
+.tabelLaporan th{
+    background:#1f4e79;
+    color:white;
+    padding:10px;
+    border:1px solid #d5dce5;
+    text-align:left;
+    white-space:nowrap;
+}
+
+.tabelLaporan td{
+    background:white;
+    color:#222;
+    padding:9px;
+    border:1px solid #e1e5e9;
+    white-space:nowrap;
+}
+
+
+/* =====================================
+   SELECT
+===================================== */
+
+select{
+    width:100%;
+    padding:12px;
+    margin-bottom:12px;
+    border-radius:9px;
+    border:1px solid #cfd6de;
+    background:white;
+    color:#222;
+    font-size:15px;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media(min-width:600px){
+
+    .laporan-menu{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media(min-width:850px){
+
+    .laporan-menu{
+        grid-template-columns:1fr 1fr 1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+    .laporan-header{
+        padding:17px 12px;
+    }
+
+    .laporan-header h1{
+        font-size:21px;
+    }
+
+    .laporan-menu button{
+        min-height:54px;
+        font-size:15px;
+    }
+
+    .ringkasan-item{
+        font-size:14px;
+    }
+
+}
+
+
+/* =====================================
+   CETAK
+===================================== */
+
+@media print{
+
+    body{
+        background:white;
+        padding:0;
+    }
+
+    .laporan-menu,
+    .tombol-kembali,
+    .tombol-beranda,
+    select{
+        display:none !important;
+    }
+
+    .laporan-panel{
+        display:block !important;
+    }
+
+    .laporan-header{
+        background:white;
+        color:black;
+        border:1px solid #000;
+        box-shadow:none;
+    }
+
+    .info,
+    .ringkasan-angsuran,
+    .tabelLaporan{
+        box-shadow:none;
+        border:1px solid #000;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="laporan-container">
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<div class="laporan-header">
+
+    <h1>📊 LAPORAN BBCS</h1>
+
+    <p>
+        BERKAH BERSAMA CORE SYSTEM
+    </p>
+
+</div>
+
+
+<!-- =====================================
+     BERANDA
+===================================== -->
+
+<a
+    href="../bbcs.html"
+    class="tombol-beranda"
+>
+    🏠 Beranda
+</a>
+
+
+
+<!-- =====================================
+     MENU LAPORAN
+===================================== -->
+
+<div
+    id="menuLaporan"
+    class="laporan-menu"
+>
+
+    <button
+        onclick="bukaLaporan('panelRingkasan')"
+    >
+        📊 Laporan Ringkasan
+    </button>
+
+<button
+    onclick="bukaLaporan('panelPendapatan')"
+>
+    💵 Laporan Pendapatan
+</button>
+
+    <button
+        onclick="bukaLaporan('panelAnggota')"
+    >
+        👥 Detail Anggota
+    </button>
+
+
+    <button
+        onclick="bukaLaporan('panelSimpanan')"
+    >
+        💰 Laporan Simpanan
+    </button>
+
+
+    <button
+        onclick="bukaLaporan('panelTransaksi')"
+    >
+        🧾 Laporan Transaksi
+    </button>
+
+
+    <button
+        onclick="bukaLaporan('panelPinjaman')"
+    >
+        💳 Laporan Pinjaman
+    </button>
+
+
+    <button
+        onclick="bukaLaporan('panelAngsuran')"
+    >
+        📅 Laporan Angsuran
+    </button>
+
+
+    <button
+        onclick="bukaLaporan('panelGlobal')"
+    >
+        💼 Investor
+    </button>
+
+
+    <button
+        onclick="bukaLaporan('panelRiwayatGlobal')"
+    >
+        📜 Riwayat Global
+    </button>
+
+
+    <button
+        onclick="cetakLaporan()"
+    >
+        🖨️ Cetak Laporan
+    </button>
+
+</div>
+
+
+<!-- =====================================
+     PANEL RINGKASAN
+===================================== -->
+
+<div
+    id="panelRingkasan"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>📊 Laporan Ringkasan</h2>
+
+        <p>
+            Ringkasan kondisi BBCS secara keseluruhan
+        </p>
+
+    </div>
+
+
+    <div id="laporanData"></div>
+
+    <div id="laporanRingkasan"></div>
+
+</div>
+
+<!-- =====================================
+     PANEL PENDAPATAN
+===================================== -->
+
+<div
+    id="panelPendapatan"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>💵 Laporan Pendapatan</h2>
+
+        <p>
+            Rekap pendapatan dan laba BBCS
+        </p>
+
+    </div>
+
+
+    <div class="ringkasan-angsuran">
+
+        <h3>
+            📈 RINGKASAN PENDAPATAN
+        </h3>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Admin Pinjaman
+            </span>
+
+            <b id="laporanPendapatanAdminPinjaman">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Admin Investor
+            </span>
+
+            <b id="laporanPendapatanAdminInvestor">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Jasa
+            </span>
+
+            <b id="laporanPendapatanJasa">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Denda
+            </span>
+
+            <b id="laporanPendapatanDenda">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Pendapatan Transaksi Umum
+            </span>
+
+            <b id="laporanPendapatanUmum">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                <b>Pendapatan Bruto</b>
+            </span>
+
+            <b id="laporanPendapatanBruto">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Transaksi Umum
+            </span>
+
+            <b id="laporanPendapatanPengeluaranUmum">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Jasa Investor
+            </span>
+
+            <b id="laporanPendapatanJasaInvestor">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                <b>Total Pengeluaran</b>
+            </span>
+
+            <b id="laporanPendapatanPengeluaran">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                <b>Laba Netto</b>
+            </span>
+
+            <b id="laporanPendapatanLabaNetto">
+                Rp 0
+            </b>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================
+     PANEL DETAIL ANGGOTA
+===================================== -->
+
+<div
+    id="panelAnggota"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>👥 Detail Anggota</h2>
+
+        <p>
+            Informasi anggota, simpanan dan pinjaman
+        </p>
+
+    </div>
+
+
+    <div id="detailAnggota"></div>
+
+</div>
+
+
+<!-- =====================================
+     PANEL SIMPANAN
+===================================== -->
+
+<div
+    id="panelSimpanan"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>💰 Laporan Simpanan</h2>
+
+        <p>
+            Rincian simpanan berdasarkan anggota
+        </p>
+
+    </div>
+
+
+    <select
+        id="pilihLaporanSimpanan"
+        onchange="tampilLaporanSimpanan()"
+    >
+
+        <option value="">
+            Pilih Anggota
+        </option>
+
+    </select>
+
+
+    <div id="laporanSimpanan"></div>
+
+</div>
+
+
+<!-- =====================================
+     PANEL TRANSAKSI
+===================================== -->
+
+<div
+    id="panelTransaksi"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>🧾 Laporan Transaksi</h2>
+
+        <p>
+            Riwayat pemasukan dan pengeluaran BBCS
+        </p>
+
+    </div>
+
+
+    <select
+        id="pilihLaporanTransaksi"
+        onchange="tampilLaporanTransaksi()"
+    >
+
+        <option value="">
+            Semua Anggota
+        </option>
+
+    </select>
+
+
+    <select
+        id="filterJenisTransaksi"
+        onchange="tampilLaporanTransaksi()"
+    >
+
+        <option value="">
+            Semua Jenis
+        </option>
+
+        <option value="Pemasukan">
+            Pemasukan
+        </option>
+
+        <option value="Pengeluaran">
+            Pengeluaran
+        </option>
+
+    </select>
+
+
+    <div id="laporanTransaksi"></div>
+
+</div>
+
+
+<!-- =====================================
+     PANEL PINJAMAN
+===================================== -->
+
+<div
+    id="panelPinjaman"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>💳 Laporan Pinjaman</h2>
+
+        <p>
+            Rekap seluruh pinjaman BBCS
+        </p>
+
+    </div>
+
+
+    <div class="info">
+
+        Total Pinjaman :
+        <b id="laporanTotalPinjaman">
+            Rp 0
+        </b>
+
+        <br>
+
+        Pinjaman Aktif :
+        <b id="laporanPinjamanAktif">
+            0
+        </b>
+
+        <br>
+
+        Pinjaman Lunas :
+        <b id="laporanPinjamanLunas">
+            0
+        </b>
+
+        <br>
+
+        Total Pokok :
+        <b id="laporanTotalPokok">
+            Rp 0
+        </b>
+
+        <br>
+
+        Total Jasa :
+        <b id="laporanTotalJasa">
+            Rp 0
+        </b>
+
+        <br>
+
+        Total Angsuran :
+        <b id="laporanTotalAngsuran">
+            Rp 0
+        </b>
+
+        <br>
+
+        Sisa Pinjaman :
+        <b id="laporanSisaPinjaman">
+            Rp 0
+        </b>
+
+    </div>
+
+
+    <div class="tabelLaporan">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID Pinjaman</th>
+                    <th>Nama</th>
+                    <th>Jumlah</th>
+                    <th>Bayar Pokok</th>
+                    <th>Jasa</th>
+                    <th>Denda</th>
+                    <th>Total Bayar</th>
+                    <th>Sisa</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="isiLaporanPinjaman"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<!-- =====================================
+     PANEL ANGSURAN
+===================================== -->
+
+<div
+    id="panelAngsuran"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>📅 Laporan Angsuran</h2>
+
+        <p>
+            Riwayat pembayaran angsuran anggota
+        </p>
+
+    </div>
+
+
+    <!-- =================================
+         RINGKASAN ANGSURAN
+    ================================== -->
+
+    <div class="ringkasan-angsuran">
+
+        <h3>
+            📊 RINGKASAN ANGSURAN
+        </h3>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Jumlah Pembayaran
+            </span>
+
+            <b id="laporanJumlahAngsuran">
+                0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Total Pokok
+            </span>
+
+            <b id="laporanAngsuranPokok">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Total Jasa
+            </span>
+
+            <b id="laporanAngsuranJasa">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Total Denda
+            </span>
+
+            <b id="laporanAngsuranDenda">
+                Rp 0
+            </b>
+
+        </div>
+
+
+        <div class="ringkasan-item">
+
+            <span>
+                Total Angsuran
+            </span>
+
+            <b id="laporanAngsuranTotal">
+                Rp 0
+            </b>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================
+         RIWAYAT ANGSURAN
+    ================================== -->
+
+    <div class="panel-header">
+
+        <h2>📜 Riwayat Angsuran</h2>
+
+        <p>
+            Data pembayaran tersimpan berdasarkan periode
+        </p>
+
+    </div>
+
+
+    <div class="tabelLaporan">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>ID Pinjaman</th>
+                    <th>ID Anggota</th>
+                    <th>Nama</th>
+                    <th>Periode</th>
+                    <th>Pokok</th>
+                    <th>Jasa</th>
+                    <th>Denda</th>
+                    <th>Total</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="isiLaporanAngsuran">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     PANEL GLOBAL
+===================================== -->
+
+<div
+    id="panelGlobal"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>💼 Investor</h2>
+
+        <p>
+            Kondisi Investor BBCS
+        </p>
+
+    </div>
+
+
+    <div class="info">
+
+        <b>💼 INVESTOR BBCS</b>
+
+        <br><br>
+
+        Modal Investor :
+        <b id="globalModalInvestor">
+            Rp 0
+        </b>
+
+        <br><br>
+
+        Jasa Investor :
+        <b id="globalJasaInvestor">
+            Rp 0
+        </b>
+
+        <br><br>
+
+        Penarikan Modal :
+        <b id="globalPenarikanModalInvestor">
+            Rp 0
+        </b>
+
+        <br><br>
+
+        Saldo Modal Investor :
+        <b id="globalSaldoModalInvestor">
+            Rp 0
+        </b>
+
+        <br><br>
+
+        Status Investor :
+        <b id="globalStatusInvestor">
+            -
+        </b>
+
+    </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     PANEL RIWAYAT GLOBAL
+===================================== -->
+
+<div
+    id="panelRiwayatGlobal"
+    class="laporan-panel"
+>
+
+    <button
+        class="tombol-kembali"
+        onclick="kembaliMenu()"
+    >
+        ⬅ Kembali
+    </button>
+
+
+    <div class="panel-header">
+
+        <h2>📜 Riwayat Global</h2>
+
+        <p>
+            Seluruh riwayat transaksi BBCS
+        </p>
+
+    </div>
+
+
+    <div class="tabelLaporan">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Tanggal</th>
+                    <th>Jenis</th>
+                    <th>Keterangan</th>
+                    <th>Jumlah</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="isiRiwayatGlobal">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<!-- =====================================
+     DATABASE CORE
+===================================== -->
+
+<script src="../js/core/database.js"></script>
+
+<script src="../js/auth/hakakses.js"></script>
+
+
+<!-- =====================================
+     MODUL LAPORAN
+===================================== -->
+
+<script src="laporan_ringkasan.js"></script>
+
+<script src="laporan_anggota.js"></script>
+
+<script src="laporan_simpanan.js"></script>
+
+<script src="laporan_transaksi.js"></script>
+
+<script src="laporan_pinjaman.js"></script>
+
+<script src="laporan_angsuran.js"></script>
+
+<script src="laporan_investor.js"></script>
+
+<script src="laporan_pendapatan.js"></script>
+
+<script src="laporan_riwayat_global.js"></script>
+
+<script src="laporan_cetak.js"></script>
+
+
+<!-- =====================================
+     NAVIGASI LAPORAN
+===================================== -->
+
+<script>
+
+function bukaLaporan(id){
+
+    /*
+     * Sembunyikan menu utama
+     */
+
+    const menu =
+        document.getElementById(
+            "menuLaporan"
+        );
+
+
+    if(menu){
+
+        menu.style.display = "none";
+
+    }
+
+
+    /*
+     * Tutup semua panel
+     */
+
+    document
+        .querySelectorAll(
+            ".laporan-panel"
+        )
+        .forEach(function(panel){
+
+            panel.classList.remove(
+                "aktif"
+            );
+
+        });
+
+
+    /*
+     * Cari panel tujuan
+     */
+
+    const panel =
+        document.getElementById(id);
+
+
+    if(!panel){
+
+        console.warn(
+            "Panel laporan tidak ditemukan:",
+            id
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Tampilkan panel
+     */
+
+    panel.classList.add(
+        "aktif"
+    );
+
+
+    /* =================================
+       RINGKASAN
+    ================================= */
+
+    if(
+        id === "panelRingkasan"
+    ){
+
+        if(
+            typeof tampilLaporanRingkasan ===
+            "function"
+        ){
+
+            tampilLaporanRingkasan();
+
+        }
+
+    }
+
+
+    /* =================================
+       DETAIL ANGGOTA
+    ================================= */
+
+    if(
+        id === "panelAnggota"
+    ){
+
+        if(
+            typeof tampilDetailAnggota ===
+            "function"
+        ){
+
+            tampilDetailAnggota();
+
+        }
+
+    }
+
+
+    /* =================================
+       SIMPANAN
+    ================================= */
+
+    if(
+        id === "panelSimpanan"
+    ){
+
+        if(
+            typeof tampilPilihanLaporanSimpanan ===
+            "function"
+        ){
+
+            tampilPilihanLaporanSimpanan();
+
+        }
+
+    }
+
+
+    /* =================================
+       TRANSAKSI
+    ================================= */
+
+    if(
+        id === "panelTransaksi"
+    ){
+
+        if(
+            typeof tampilPilihanLaporanTransaksi ===
+            "function"
+        ){
+
+            tampilPilihanLaporanTransaksi();
+
+        }
+
+
+        if(
+            typeof tampilLaporanTransaksi ===
+            "function"
+        ){
+
+            tampilLaporanTransaksi();
+
+        }
+
+    }
+
+
+    /* =================================
+       PINJAMAN
+    ================================= */
+
+    if(
+        id === "panelPinjaman"
+    ){
+
+        if(
+            typeof tampilLaporanPinjaman ===
+            "function"
+        ){
+
+            tampilLaporanPinjaman();
+
+        }
+
+    }
+
+
+    /* =================================
+       ANGSURAN
+    ================================= */
+
+    if(
+        id === "panelAngsuran"
+    ){
+
+        if(
+            typeof tampilLaporanAngsuran ===
+            "function"
+        ){
+
+            tampilLaporanAngsuran();
+
+        }
+
+    }
+
+/* =================================
+   PENDAPATAN
+================================= */
+
+if(
+    id === "panelPendapatan"
+){
+
+    if(
+        typeof tampilLaporanPendapatanBBCS ===
+        "function"
+    ){
+
+        tampilLaporanPendapatanBBCS();
+
+    }
+
+}
+
+    /* =================================
+       GLOBAL
+    ================================= */
+
+    if(
+        id === "panelGlobal"
+    ){
+
+        if(
+            typeof tampilLaporanInvestor ===
+            "function"
+        ){
+
+            tampilLaporanInvestor();
+
+        }
+
+    }
+
+
+    /* =================================
+       RIWAYAT GLOBAL
+    ================================= */
+
+    if(
+        id === "panelRiwayatGlobal"
+    ){
+
+        if(
+            typeof tampilRiwayatGlobalBBCS ===
+            "function"
+        ){
+
+            tampilRiwayatGlobalBBCS();
+
+        }
+
+    }
+
+}
+
+
+/* =====================================
+   KEMBALI KE MENU
+===================================== */
+
+function kembaliMenu(){
+
+    /*
+     * Tutup semua panel
+     */
+
+    document
+        .querySelectorAll(
+            ".laporan-panel"
+        )
+        .forEach(function(panel){
+
+            panel.classList.remove(
+                "aktif"
+            );
+
+        });
+
+
+    /*
+     * Tampilkan kembali menu
+     */
+
+    const menu =
+        document.getElementById(
+            "menuLaporan"
+        );
+
+
+    if(menu){
+
+        menu.style.display = "grid";
+
+    }
+
+}
+
+
+/* =====================================
+   CETAK LAPORAN
+===================================== */
+
+function cetakLaporan(){
+
+    /*
+     * Gunakan modul cetak BBCS
+     * bila tersedia.
+     */
+
+    if(
+        typeof cetakLaporanBBCS ===
+        "function"
+    ){
+
+        cetakLaporanBBCS();
+
+        return;
+
+    }
+
+
+    /*
+     * Alternatif modul cetak global.
+     */
+
+    if(
+        typeof cetakLaporanGlobal ===
+        "function"
+    ){
+
+        cetakLaporanGlobal();
+
+        return;
+
+    }
+
+
+    /*
+     * Fallback browser.
+     */
+
+    window.print();
+
+}
+
+</script>
+
+
+<!-- =====================================
+     SELESAI HALAMAN LAPORAN
+===================================== -->
+
+</div>
+
+</body>
+
+</html>

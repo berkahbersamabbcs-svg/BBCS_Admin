@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+BBCS - Kas System
+</title>
+
+
+<!-- =====================================
+     BBCS CSS
+===================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header>
+
+<h1>
+BERKAH BERSAMA
+</h1>
+
+<h2>
+🏦 KAS SYSTEM
+</h2>
+
+<p>
+CORE SYSTEM
+</p>
+
+</header>
+
+
+<!-- =====================================
+     MENU
+===================================== -->
+
+<div class="menu">
+
+<a href="../bbcs.html">
+🏠 Beranda
+</a>
+
+</div>
+
+
+<!-- =====================================
+     RINGKASAN KAS
+===================================== -->
+
+<h3>
+📊 Ringkasan Kas
+</h3>
+
+
+<div class="ringkasan-kas">
+
+
+<div class="kartu-kas">
+
+💰 Total Pemasukan
+
+<strong id="totalPemasukanKas">
+Rp 0
+</strong>
+
+</div>
+
+
+<div class="kartu-kas">
+
+💸 Total Pengeluaran
+
+<strong id="totalPengeluaranKas">
+Rp 0
+</strong>
+
+</div>
+
+
+<div class="kartu-kas">
+
+🏦 Saldo Kas
+
+<strong id="saldoKas">
+Rp 0
+</strong>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================
+     RIWAYAT KAS
+===================================== -->
+
+<h3>
+📋 Riwayat Kas
+</h3>
+
+
+<div
+    id="dataKas"
+    class="tabel-kas"
+>
+
+<div class="info">
+
+Belum ada data kas.
+
+</div>
+
+</div>
+
+
+<!-- =====================================
+     NERACA / POSISI KEUANGAN
+===================================== -->
+
+<h3>
+⚖️ Posisi Keuangan
+</h3>
+
+
+<div
+    id="neracaKeuangan"
+    class="neraca-container"
+>
+
+
+<h4>
+💰 AKTIVA
+</h4>
+
+
+<table class="tabel-neraca">
+
+<thead>
+
+<tr>
+
+<th>
+Akun
+</th>
+
+<th>
+Jumlah
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+<tr>
+
+<td>
+🏦 Kas
+</td>
+
+<td id="neracaKas">
+Rp 0
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+📋 Piutang Pinjaman
+</td>
+
+<td id="neracaPiutang">
+Rp 0
+</td>
+
+</tr>
+
+
+<tr class="total-neraca">
+
+<td>
+TOTAL AKTIVA
+</td>
+
+<td id="totalAktiva">
+Rp 0
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+
+<h4>
+📊 PASIVA & EKUITAS
+</h4>
+
+
+<table class="tabel-neraca">
+
+<thead>
+
+<tr>
+
+<th>
+Akun
+</th>
+
+<th>
+Jumlah
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+<tr>
+
+<td>
+💼 Modal Investor
+</td>
+
+<td id="neracaModalInvestor">
+Rp 0
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+📈 Jasa Investor
+</td>
+
+<td id="neracaJasaInvestor">
+Rp 0
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+🏦 Ekuitas
+</td>
+
+<td id="neracaEkuitas">
+Rp 0
+</td>
+
+</tr>
+
+
+<tr class="total-neraca">
+
+<td>
+TOTAL PASIVA & EKUITAS
+</td>
+
+<td id="totalPasiva">
+Rp 0
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+
+</div>
+
+
+<!-- =====================================
+     DATABASE CORE
+===================================== -->
+
+<script
+    src="../js/core/database.js">
+</script>
+
+
+<!-- =====================================
+     SECURITY BBCS
+===================================== -->
+
+<script
+    src="../js/security/securityBBCS.js">
+</script>
+
+
+<script
+    src="../js/security/pengaman.js">
+</script>
+
+
+<!-- =====================================
+     TRANSAKSI BBCS
+===================================== -->
+
+<script
+    src="../js/transaksi/transaksi.js">
+</script>
+
+
+<!-- =====================================
+     KAS BBCS
+===================================== -->
+
+<script
+    src="../js/kas/kas.js">
+</script>
+
+
+<!-- =====================================
+     INISIALISASI KAS
+===================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        console.log(
+            "Halaman Kas BBCS aktif"
+        );
+
+
+        // =================================
+        // TAMPILKAN RIWAYAT KAS
+        // =================================
+
+        if(
+            typeof tampilKasBBCS ===
+            "function"
+        ){
+
+            tampilKasBBCS();
+
+        }
+        else if(
+            typeof tampilKas ===
+            "function"
+        ){
+
+            tampilKas();
+
+        }
+
+
+        // =================================
+        // RINGKASAN KAS
+        // =================================
+
+        if(
+            typeof getRingkasanKasBBCS ===
+            "function"
+        ){
+
+            const data =
+                getRingkasanKasBBCS();
+
+
+            const masuk =
+                document.getElementById(
+                    "totalPemasukanKas"
+                );
+
+
+            const keluar =
+                document.getElementById(
+                    "totalPengeluaranKas"
+                );
+
+
+            const saldo =
+                document.getElementById(
+                    "saldoKas"
+                );
+
+
+            if(masuk){
+
+                masuk.textContent =
+                    rupiah(
+                        data.totalPemasukan || 0
+                    );
+
+            }
+
+
+            if(keluar){
+
+                keluar.textContent =
+                    rupiah(
+                        data.totalPengeluaran || 0
+                    );
+
+            }
+
+
+            if(saldo){
+
+                saldo.textContent =
+                    rupiah(
+                        data.saldoKas || 0
+                    );
+
+            }
+
+        }
+
+
+        // =================================
+        // DATA NERACA
+        // =================================
+
+        if(
+            typeof ambilDataNeracaKasBBCS ===
+            "function"
+        ){
+
+            const data =
+                ambilDataNeracaKasBBCS();
+
+
+            const mapping = {
+
+                neracaKas:
+                    data.kas || 0,
+
+                neracaPiutang:
+                    data.piutang || 0,
+
+                totalAktiva:
+                    data.totalAktiva || 0,
+
+                neracaModalInvestor:
+                    data.modalInvestor || 0,
+
+                neracaJasaInvestor:
+                    data.jasaInvestor || 0,
+
+                neracaEkuitas:
+                    data.ekuitas || 0,
+
+                totalPasiva:
+                    data.totalPasiva || 0
+
+            };
+
+
+            Object.keys(mapping)
+            .forEach(function(id){
+
+                const el =
+                    document.getElementById(
+                        id
+                    );
+
+
+                if(el){
+
+                    el.textContent =
+                        rupiah(
+                            mapping[id]
+                        );
+
+                }
+
+            });
+
+        }
+
+
+        console.log(
+            "Halaman Kas BBCS siap"
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

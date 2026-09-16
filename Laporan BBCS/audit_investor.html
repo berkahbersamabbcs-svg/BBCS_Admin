@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Audit Investor BBCS</title>
+</head>
+<body>
+
+<h2>AUDIT INVESTOR BBCS</h2>
+
+<div id="hasil">Membaca database...</div>
+
+<script>
+
+function tampil(nama, nilai){
+
+    return `
+        <h3>${nama}</h3>
+        <pre>${nilai === null ? "NULL / TIDAK ADA" : nilai}</pre>
+    `;
+
+}
+
+let investor =
+    localStorage.getItem("investor");
+
+let rekeningInvestor =
+    localStorage.getItem("rekeningInvestor");
+
+let riwayatInvestor =
+    localStorage.getItem("riwayatInvestor");
+
+document.getElementById("hasil").innerHTML =
+
+    "<b>ORIGIN:</b><br>" +
+    location.origin +
+
+    tampil(
+        "investor",
+        investor
+    ) +
+
+    tampil(
+        "rekeningInvestor",
+        rekeningInvestor
+    ) +
+
+    tampil(
+        "riwayatInvestor",
+        riwayatInvestor
+    );
+
+</script>
+
+</body>
+</html>

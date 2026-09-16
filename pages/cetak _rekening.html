@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+BBCS - Cetak Buku Rekening
+</title><!-- =====================================
+     BBCS CSS
+     ===================================== --><link rel="stylesheet"
+href="../css/style.css"><style>
+
+/* =====================================
+   CETAK CONTAINER
+   ===================================== */
+
+.cetak-container{
+
+    background:white;
+
+    padding:20px;
+
+    margin-top:15px;
+
+    border-radius:12px;
+
+}
+
+
+/* =====================================
+   HEADER CETAK
+   ===================================== */
+
+.cetak-header{
+
+    text-align:center;
+
+    border-bottom:
+    2px solid #1f4e79;
+
+    padding-bottom:15px;
+
+    margin-bottom:20px;
+
+}
+
+
+.cetak-header h2{
+
+    margin:5px 0;
+
+}
+
+
+/* =====================================
+   DATA ANGGOTA
+   ===================================== */
+
+.data-anggota{
+
+    padding:15px;
+
+    background:#f5f7fa;
+
+    border-radius:10px;
+
+    margin-bottom:15px;
+
+}
+
+
+/* =====================================
+   TABEL SIMPANAN
+   ===================================== */
+
+.tabel-simpanan{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:10px;
+
+}
+
+
+.tabel-simpanan td{
+
+    padding:10px;
+
+    border-bottom:
+    1px solid #ddd;
+
+}
+
+
+.tabel-simpanan td:last-child{
+
+    text-align:right;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================
+   TOTAL
+   ===================================== */
+
+.total{
+
+    margin-top:15px;
+
+    padding:15px;
+
+    background:#e8f5e9;
+
+    border-radius:10px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================
+   TOMBOL CETAK
+   ===================================== */
+
+.btn-cetak{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:20px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================
+   MODE PRINT
+   ===================================== */
+
+@media print{
+
+    .menu,
+    .btn-cetak{
+
+        display:none;
+
+    }
+
+
+    body{
+
+        background:white;
+
+        padding:0;
+
+    }
+
+
+    .cetak-container{
+
+        box-shadow:none;
+
+        margin:0;
+
+    }
+
+}
+
+</style></head><body
+onload="tampilCetakRekening()"
+><!-- =====================================
+     HEADER
+     ===================================== --><header><h1>
+BERKAH BERSAMA
+</h1><h2>
+BUKU REKENING ANGGOTA
+</h2><p>
+CORE SYSTEM
+</p></header><!-- =====================================
+     NAVIGASI
+     ===================================== --><div class="menu"><a href="rekening.html">
+← Kembali Rekening
+</a><a href="../bbcs.html">
+🏠 Beranda
+</a></div><!-- =====================================
+     HASIL CETAK REKENING
+     ===================================== --><div
+class="cetak-container"
+id="hasilCetak">Memuat data rekening...
+
+</div><!-- =====================================
+     TOMBOL CETAK
+     ===================================== --><button
+type="button"
+class="btn-cetak"
+onclick="cetakSekarang()"
+
+«»
+
+🖨️ CETAK / SIMPAN PDF
+
+</button><!-- =====================================
+     BBCS DATABASE
+     ===================================== --><script
+src="../js/core/database.js">
+</script><!-- =====================================
+     CETAK REKENING
+     ===================================== --><script
+src="../js/cetak/cetak_rekening.js">
+</script></body></html>

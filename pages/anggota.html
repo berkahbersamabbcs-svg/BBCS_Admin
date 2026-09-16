@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+BBCS - Data Anggota
+</title>
+
+
+<!-- =====================================
+     BBCS CSS
+     ===================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+
+<style>
+
+/* =====================================
+   BBCS - UI DATA ANGGOTA
+   ===================================== */
+
+body{
+    margin:0;
+    padding:0 14px 30px;
+    background:#f4f6f8;
+    font-family:Arial,sans-serif;
+}
+
+header{
+    margin:0 -14px 15px;
+    padding:24px 16px 20px;
+    text-align:center;
+    background:linear-gradient(135deg,#16324f,#245b87);
+    color:white;
+    border-radius:0 0 22px 22px;
+    box-shadow:0 5px 18px rgba(0,0,0,.16);
+}
+
+header h1{
+    margin:0;
+    font-size:24px;
+    letter-spacing:1px;
+}
+
+header h2{
+    margin:7px 0 3px;
+    font-size:18px;
+}
+
+header p{
+    margin:0;
+    opacity:.85;
+    font-size:13px;
+    letter-spacing:2px;
+}
+
+.menu{
+    margin:0 0 16px;
+}
+
+.menu a{
+    display:inline-flex;
+    align-items:center;
+    text-decoration:none;
+    background:white;
+    color:#16324f;
+    padding:10px 15px;
+    border-radius:12px;
+    font-weight:bold;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* FORM */
+
+h3{
+    margin:18px 2px 10px;
+    font-size:18px;
+    color:#16324f;
+}
+
+.form{
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.form input{
+    width:100%;
+    box-sizing:border-box;
+    margin-bottom:12px;
+    padding:13px 14px;
+    border:1px solid #d9dee4;
+    border-radius:12px;
+    background:#fafbfc;
+    font-size:15px;
+    outline:none;
+}
+
+.form input:focus{
+    border-color:#245b87;
+    background:white;
+}
+
+#btnSimpanAnggota{
+    width:100%;
+    border:0;
+    padding:14px;
+    border-radius:12px;
+    background:#245b87;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+
+#btnSimpanAnggota:active{
+    transform:scale(.98);
+}
+
+/* DATA */
+
+.card{
+    background:transparent;
+    margin:0;
+    padding:0;
+    box-shadow:none;
+}
+
+.card h2{
+    margin:8px 2px 12px;
+    color:#16324f;
+    font-size:18px;
+}
+
+/* KARTU ANGGOTA */
+
+#daftarAnggota{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+#daftarAnggota .info{
+    background:white;
+    border-radius:18px;
+    padding:17px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+    border-left:5px solid #245b87;
+    line-height:1.7;
+    color:#333;
+}
+
+#daftarAnggota .info b{
+    display:inline-block;
+    background:#edf4fa;
+    color:#245b87;
+    padding:4px 9px;
+    border-radius:8px;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+/* LABEL STATUS */
+
+#daftarAnggota .info button{
+    border:0;
+    padding:10px 13px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-right:6px;
+    margin-top:5px;
+}
+
+#daftarAnggota .info button:first-of-type{
+    background:#edf4fa;
+    color:#245b87;
+}
+
+#daftarAnggota .info button:last-of-type{
+    background:#eef7ef;
+    color:#28743a;
+}
+
+@media(max-width:480px){
+
+    header h1{
+        font-size:21px;
+    }
+
+    header h2{
+        font-size:17px;
+    }
+
+    .form{
+        padding:15px;
+    }
+
+    #daftarAnggota .info{
+        padding:15px;
+    }
+
+}
+
+
+
+/* =====================================
+   KARTU ANGGOTA - FINAL
+   ===================================== */
+
+#daftarAnggota{
+    gap:12px;
+}
+
+.kartuAnggota{
+    position:relative;
+    background:#fff;
+    border:1px solid #e6ebef;
+    border-left:5px solid #245b87;
+    border-radius:18px;
+    padding:16px !important;
+    box-shadow:0 4px 14px rgba(0,0,0,.07);
+}
+
+.kartuAnggota:active{
+    transform:scale(.985);
+}
+
+.anggotaHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.idAnggota{
+    display:inline-block;
+    background:#edf4fa !important;
+    color:#245b87 !important;
+    padding:6px 10px !important;
+    border-radius:8px !important;
+    font-size:13px;
+    letter-spacing:.4px;
+}
+
+.badgeStatus{
+    padding:6px 10px;
+    border-radius:20px;
+    background:#eef7ef;
+    color:#28743a;
+    font-size:11px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.namaAnggotaKartu{
+    margin-top:13px;
+    font-size:19px;
+    font-weight:bold;
+    color:#16324f;
+}
+
+.petunjukKartu{
+    margin-top:5px;
+    font-size:11px;
+    color:#8a949e;
+}
+
+.anggotaDetail{
+    display:none;
+    margin-top:15px;
+    padding-top:10px;
+    border-top:1px solid #e7ebef;
+}
+
+.kartuAnggota.terbuka .anggotaDetail{
+    display:block;
+}
+
+.kartuAnggota.terbuka .petunjukKartu{
+    display:none;
+}
+
+.detailBaris{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:10px 0;
+    border-bottom:1px solid #f0f2f4;
+    font-size:13px;
+}
+
+.detailBaris span{
+    color:#737d87;
+}
+
+.detailBaris b{
+    text-align:right;
+    color:#263746;
+}
+
+.aksiAnggota{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:15px;
+}
+
+.aksiAnggota button{
+    width:100% !important;
+    margin:0 !important;
+    padding:11px 8px !important;
+    border:0;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+@media(max-width:480px){
+
+    .kartuAnggota{
+        padding:15px !important;
+    }
+
+    .namaAnggotaKartu{
+        font-size:18px;
+    }
+
+}
+
+
+/* =====================================
+   FORM MODE EDIT
+   ===================================== */
+
+#btnBatalEditAnggota{
+    width:100%;
+    margin-top:9px;
+    padding:12px;
+    border:1px solid #dfe4e8;
+    border-radius:12px;
+    background:#f5f6f7;
+    color:#5f6871;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#btnBatalEditAnggota:active{
+    transform:scale(.98);
+}
+
+#btnSimpanAnggota{
+    margin-bottom:0;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+     ===================================== -->
+
+<header>
+
+<h1>
+BERKAH BERSAMA
+</h1>
+
+<h2>
+DATA ANGGOTA
+</h2>
+
+<p>
+CORE SYSTEM
+</p>
+
+</header>
+
+
+
+<!-- =====================================
+     NAVIGASI
+     ===================================== -->
+
+<div class="menu">
+
+<a href="../bbcs.html">
+🏠 Beranda
+</a>
+
+</div>
+
+
+
+<!-- =====================================
+     FORM ANGGOTA
+     ===================================== -->
+
+<h3>
+👥 Tambah Anggota
+</h3>
+
+
+<div class="form">
+
+
+<input
+    id="namaAnggota"
+    type="text"
+    placeholder="Nama Anggota"
+    autocomplete="off"
+>
+
+
+<input
+    id="tanggalMasuk"
+    type="date"
+>
+
+
+<input
+    id="noHp"
+    type="tel"
+    inputmode="numeric"
+    placeholder="Nomor HP"
+>
+
+
+<button
+    id="btnSimpanAnggota"
+    type="button"
+>
+
+💾 Simpan Anggota
+
+</button>
+
+
+</div>
+
+
+
+<!-- =====================================
+     BBCS DATABASE
+     ===================================== -->
+
+<script
+    src="../js/core/database.js">
+</script>
+
+
+
+<!-- =====================================
+     BBCS HAK AKSES
+     ===================================== -->
+
+<script
+    src="../js/auth/hakakses.js">
+</script>
+
+
+
+<!-- =====================================
+     MODUL ANGGOTA
+     ===================================== -->
+
+
+
+<!-- =====================================
+     DAFTAR DATA ANGGOTA
+     ===================================== -->
+
+<section class="card">
+
+<h2>👥 DATA ANGGOTA</h2>
+
+<div class="pencarianAnggota">
+
+    <span>🔎</span>
+
+    <input
+        id="cariAnggota"
+        type="search"
+        placeholder="Cari nama, ID, atau nomor HP..."
+        autocomplete="off"
+    >
+
+</div>
+
+<div id="daftarAnggota">
+Belum ada data anggota
+</div>
+
+</section>
+
+<script
+    src="../js/anggota/anggota.js">
+</script>
+
+
+</body>
+
+</html>

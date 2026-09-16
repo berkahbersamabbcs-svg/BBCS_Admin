@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+BBCS - Buku Rekening Anggota
+</title>
+
+
+<!-- =====================================
+     BBCS CSS
+===================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+
+<!-- =====================================
+     STYLE REKENING
+===================================== -->
+
+<style>
+
+.rekening-card{
+
+    background:white;
+    padding:18px;
+    margin-top:15px;
+    border-radius:14px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0,0,0,.10);
+
+}
+
+
+.rekening-header{
+
+    background:#1f4e79;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+
+}
+
+
+.rekening-header h3{
+
+    margin:0 0 6px 0;
+
+}
+
+
+.rekening-header p{
+
+    margin:0;
+    font-size:14px;
+
+}
+
+
+.rekening-ringkasan{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+    margin-top:15px;
+
+}
+
+
+.rekening-item{
+
+    background:#f5f7fa;
+    padding:12px;
+    border-radius:10px;
+
+}
+
+
+.rekening-item span{
+
+    display:block;
+    font-size:13px;
+    color:#666;
+    margin-bottom:5px;
+
+}
+
+
+.rekening-item strong{
+
+    font-size:16px;
+
+}
+
+
+.rekening-total{
+
+    margin-top:12px;
+    padding:15px;
+    background:#e8f5e9;
+    border-radius:10px;
+    color:#166534;
+
+}
+
+
+.rekening-aksi{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+    margin-top:15px;
+
+}
+
+
+.rekening-aksi button{
+
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+
+}
+
+
+.btn-edit{
+
+    background:#f59e0b;
+    color:white;
+
+}
+
+
+.btn-cetak{
+
+    background:#2563eb;
+    color:white;
+
+}
+
+
+.form-koreksi{
+
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    padding:15px;
+    margin-top:15px;
+    border-radius:12px;
+
+}
+
+
+.form-koreksi input{
+
+    width:100%;
+    padding:11px;
+    margin:6px 0 12px;
+
+    border:
+        1px solid #ccc;
+
+    border-radius:8px;
+
+    box-sizing:border-box;
+
+}
+
+
+.form-koreksi button{
+
+    padding:11px 15px;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    margin-right:6px;
+    cursor:pointer;
+
+}
+
+
+.btn-simpan{
+
+    background:#16a34a;
+    color:white;
+
+}
+
+
+.btn-batal{
+
+    background:#dc2626;
+    color:white;
+
+}
+
+
+.riwayat-card{
+
+    background:white;
+    padding:14px;
+    margin-top:10px;
+    border-radius:10px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.08);
+
+}
+
+
+.riwayat-card .tanggal{
+
+    font-size:13px;
+    color:#666;
+
+}
+
+
+.riwayat-card .jenis{
+
+    font-weight:bold;
+    margin-top:5px;
+
+}
+
+
+.riwayat-card .keterangan{
+
+    margin-top:5px;
+
+}
+
+
+.riwayat-card .jumlah{
+
+    font-weight:bold;
+    margin-top:8px;
+    font-size:16px;
+
+}
+
+
+@media(max-width:600px){
+
+    .rekening-ringkasan{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .rekening-aksi{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body
+    onload="tampilPilihanRekening()"
+>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header>
+
+<h1>
+BERKAH BERSAMA
+</h1>
+
+<h2>
+Core System 
+</h2>
+
+<p>
+REKENING ANGGOTA 
+</p>
+
+</header>
+
+
+<!-- =====================================
+     MENU
+===================================== -->
+
+<div class="menu">
+
+<a href="../bbcs.html">
+🏠 Beranda
+</a>
+
+<a href="javascript:history.back()">
+⬅️ Kembali
+</a>
+</div>
+
+
+<!-- =====================================
+     PILIH ANGGOTA
+===================================== -->
+
+<h3>
+👤 Pilih Anggota
+</h3>
+
+
+<select
+    id="pilihRekening"
+    onchange="tampilRekening()"
+>
+
+<option value="">
+Pilih Anggota
+</option>
+
+</select>
+
+
+<!-- =====================================
+     DETAIL REKENING
+===================================== -->
+
+<div id="dataRekening">
+
+<div class="info">
+Silakan pilih anggota
+</div>
+
+</div>
+
+
+<!-- =====================================
+     AKSI REKENING
+===================================== -->
+
+<div
+    id="aksiQRRekening"
+    class="rekening-aksi"
+    style="display:none;"
+>
+
+
+
+
+<button
+    type="button"
+    class="btn-aktivasi"
+    onclick="buatQRAktivasiRekening()"
+>
+🔄 QR REKENING TERBARU
+</button>
+
+
+
+
+</div>
+
+
+
+
+<!-- =====================================
+     RIWAYAT TRANSAKSI
+===================================== -->
+
+<div id="blokRiwayatRekening" style="display:none;">
+
+<h3>
+📜 Riwayat Transaksi
+</h3>
+
+
+<div id="riwayatRekening">
+
+<div class="info">
+Belum ada transaksi
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================
+     FORM EDIT
+===================================== -->
+
+<div
+    id="formEditRekening"
+></div>
+
+
+<!-- =====================================
+     QR REKENING TERBARU
+===================================== -->
+
+<div
+    id="qrAktivasiRekening"
+    style="display:none; margin-top:20px; text-align:center;"
+>
+
+    <h3>📱 QR REKENING TERBARU</h3>
+
+    <p style="font-size:13px;">
+        Scan QR ini menggunakan aplikasi
+        <b>Rekening_BBCS</b>.
+    </p>
+
+    <div
+        id="qrAktivasiCanvas"
+        style="display:flex; justify-content:center; margin:15px 0;"
+    ></div>
+
+    <p
+        id="qrAktivasiInfo"
+        style="font-size:14px; font-weight:bold;"
+    ></p>
+
+    <button
+        type="button"
+        onclick="tutupQRAktivasiRekening()"
+    >
+        ✖️ TUTUP QR
+    </button>
+
+</div>
+
+
+<!-- =====================================
+     DATABASE CORE
+===================================== -->
+
+<script
+    src="../js/core/database.js">
+</script>
+
+
+<!-- =====================================
+     HAK AKSES
+===================================== -->
+
+<script
+    src="../js/auth/hakakses.js">
+</script>
+
+
+<!-- =====================================
+     MODUL REKENING
+===================================== -->
+
+<script
+    src="../js/rekening/qrcode.min.js">
+</script>
+
+
+<script
+    src="../js/rekening/rekening.js">
+</script>
+
+
+</body>
+
+</html>

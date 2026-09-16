@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        BBCS - Cetak Buku Rekening
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <style>
+
+        /* =====================================
+           BODY
+        ===================================== */
+
+        body {
+            background: #f5f5f5;
+        }
+
+
+        /* =====================================
+           CONTAINER
+        ===================================== */
+
+        .cetak-container {
+            background: white;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 14px;
+
+            box-shadow:
+                0 3px 10px
+                rgba(0, 0, 0, .10);
+        }
+
+
+        /* =====================================
+           HEADER CETAK
+        ===================================== */
+
+        .cetak-header {
+            text-align: center;
+
+            border-bottom:
+                2px solid #1f4e79;
+
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cetak-header h2 {
+            margin: 5px 0;
+        }
+
+        .cetak-header p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+
+        /* =====================================
+           DATA ANGGOTA
+        ===================================== */
+
+        .data-anggota {
+            padding: 15px;
+            background: #f5f7fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+
+        /* =====================================
+           TABEL SIMPANAN
+        ===================================== */
+
+        .tabel-simpanan {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabel-simpanan td {
+            padding: 10px;
+
+            border-bottom:
+                1px solid #ddd;
+        }
+
+        .tabel-simpanan td:last-child {
+            text-align: right;
+            font-weight: bold;
+        }
+
+
+        /* =====================================
+           TOTAL
+        ===================================== */
+
+        .total {
+            margin-top: 15px;
+            padding: 15px;
+
+            background: #e8f5e9;
+
+            border-radius: 10px;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            color: #166534;
+        }
+
+
+        /* =====================================
+           AREA CETAK
+        ===================================== */
+
+        .area-cetak {
+            margin-top: 20px;
+        }
+
+
+        /* =====================================
+           TOMBOL CETAK
+        ===================================== */
+
+        .btn-cetak {
+            display: block;
+            width: 100%;
+
+            padding: 16px;
+
+            background: #2563eb;
+            color: white;
+
+            border: none;
+            border-radius: 10px;
+
+            font-size: 17px;
+            font-weight: bold;
+
+            text-align: center;
+
+            cursor: pointer;
+        }
+
+
+        /* =====================================
+           TOMBOL KEMBALI
+        ===================================== */
+
+        .btn-kembali {
+            display: block;
+            width: 100%;
+
+            padding: 13px;
+            margin-top: 10px;
+
+            background: #64748b;
+            color: white;
+
+            border: none;
+            border-radius: 10px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            text-align: center;
+            text-decoration: none;
+        }
+
+
+        /* =====================================
+           PRINT
+        ===================================== */
+
+        @media print {
+
+            header,
+            .menu,
+            .area-cetak {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .cetak-container {
+                box-shadow: none;
+                margin: 0;
+                border-radius: 0;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body
+    onload="tampilCetakRekening()"
+>
+
+
+    <!-- =====================================
+         HEADER
+    ===================================== -->
+
+    <header>
+
+        <h1>
+            BERKAH BERSAMA
+        </h1>
+
+        <h2>
+            BUKU REKENING ANGGOTA
+        </h2>
+
+        <p>
+            CORE SYSTEM
+        </p>
+
+    </header>
+
+
+    <!-- =====================================
+         NAVIGASI
+    ===================================== -->
+
+    <div class="menu">
+
+        <a href="rekening.html">
+            ← Kembali Rekening
+        </a>
+
+        <a href="../bbcs.html">
+            🏠 Beranda
+        </a>
+
+    </div>
+
+
+    <!-- =====================================
+         HASIL BUKU REKENING
+    ===================================== -->
+
+    <div
+        id="hasilCetak"
+        class="cetak-container"
+    >
+
+        Memuat data rekening...
+
+    </div>
+
+
+    <!-- =====================================
+         AREA TOMBOL CETAK
+    ===================================== -->
+
+    <div class="area-cetak">
+
+        <button
+            type="button"
+            class="btn-cetak"
+            onclick="cetakSekarang()"
+        >
+            🖨️ CETAK / SIMPAN PDF
+        </button>
+
+
+        <a
+            href="rekening.html"
+            class="btn-kembali"
+        >
+            ← KEMBALI KE REKENING
+        </a>
+
+    </div>
+
+
+    <!-- =====================================
+         DATABASE BBCS
+    ===================================== -->
+
+    <script
+        src="../js/core/database.js"
+    ></script>
+
+
+    <!-- =====================================
+         MESIN CETAK REKENING
+    ===================================== -->
+
+    <script
+        src="../js/cetak/cetak_rekening.js"
+    ></script>
+
+
+</body>
+
+</html>

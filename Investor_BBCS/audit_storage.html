@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Audit Storage Investor BBCS</title>
+</head>
+<body>
+
+<h3>AUDIT STORAGE INVESTOR BBCS</h3>
+
+<pre id="hasil">Membaca...</pre>
+
+<script>
+
+const hasil = document.getElementById("hasil");
+
+let rekening = localStorage.getItem("rekeningInvestor");
+let riwayat = localStorage.getItem("riwayatInvestor");
+let investor = localStorage.getItem("investor");
+
+hasil.textContent =
+    "ORIGIN:\n" +
+    location.origin +
+    "\n\n" +
+
+    "investor:\n" +
+    investor +
+    "\n\n" +
+
+    "rekeningInvestor:\n" +
+    rekening +
+    "\n\n" +
+
+    "riwayatInvestor:\n" +
+    riwayat;
+
+</script>
+
+</body>
+</html>

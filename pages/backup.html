@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+BBCS - Backup Database
+</title>
+
+
+<!-- =====================================
+     BBCS CSS
+===================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header>
+
+<h1>
+BERKAH BERSAMA
+</h1>
+
+<h2>
+BACKUP DATABASE
+</h2>
+
+<p>
+CORE SYSTEM
+</p>
+
+</header>
+
+
+<!-- =====================================
+     NAVIGASI
+===================================== -->
+
+<div class="menu">
+
+<a href="../bbcs.html">
+🏠 Beranda
+</a>
+
+</div>
+
+
+<!-- =====================================
+     BACKUP DATA
+===================================== -->
+
+<h3>
+💾 Backup Data
+</h3>
+
+
+<button
+    type="button"
+    onclick="backupData()"
+>
+💾 Simpan Backup
+</button>
+
+
+<button
+    type="button"
+    onclick="bersihkanDatabase()"
+>
+🧹 Bersihkan Database
+</button>
+
+
+
+<!-- =====================================
+     INFORMASI BACKUP
+===================================== -->
+
+<h3>
+📋 Informasi Backup
+</h3>
+
+
+<div
+    id="infoBackup"
+    class="info"
+>
+
+Belum ada backup dibuat.
+
+</div>
+
+
+
+<!-- =====================================
+     PREVIEW BACKUP
+===================================== -->
+
+<h3>
+👁️ Preview Backup
+</h3>
+
+
+<textarea
+    id="hasilBackup"
+    rows="18"
+    readonly
+    style="
+        width:100%;
+        box-sizing:border-box;
+        font-family:monospace;
+        resize:vertical;
+    "
+></textarea>
+
+
+<br>
+<br>
+
+
+<button
+    type="button"
+    onclick="salinBackup()"
+>
+📋 Salin Backup
+</button>
+
+
+<button
+    type="button"
+    onclick="downloadBackup()"
+>
+⬇️ Download File Backup
+</button>
+
+
+
+<!-- =====================================
+     RESTORE DATA
+===================================== -->
+
+<h3>
+♻️ Restore Data
+</h3>
+
+
+<button
+    type="button"
+    onclick="
+        document
+        .getElementById('fileBackup')
+        .click()
+    "
+>
+📂 Pilih File Backup
+</button>
+
+
+<input
+    type="file"
+    id="fileBackup"
+    accept=".json"
+    style="display:none"
+    onchange="tampilNamaFile()"
+>
+
+
+<p id="namaFile">
+Belum ada file dipilih
+</p>
+
+
+<button
+    type="button"
+    onclick="restoreData()"
+>
+♻️ Pulihkan Data
+</button>
+
+
+
+<!-- =====================================
+     BBCS CORE
+===================================== -->
+
+<script
+    src="../js/core/database.js">
+</script>
+
+
+<!-- =====================================
+     BBCS SECURITY
+===================================== -->
+
+<script
+    src="../js/security/securityBBCS.js">
+</script>
+
+
+<!-- =====================================
+     BBCS PENGAMAN
+===================================== -->
+
+<script
+    src="../js/security/pengaman.js">
+</script>
+
+
+<!-- =====================================
+     BBCS BACKUP
+===================================== -->
+
+<script
+    src="../js/backup/backup.js">
+</script>
+
+
+</body>
+
+</html>

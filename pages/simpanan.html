@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+BBCS - Simpanan Anggota
+</title>
+
+
+<!-- =====================================
+     BBCS CSS
+===================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header>
+
+<h1>
+BERKAH BERSAMA
+</h1>
+
+<h2>
+SIMPANAN ANGGOTA
+</h2>
+
+<p>
+CORE SYSTEM
+</p>
+
+</header>
+
+
+<!-- =====================================
+     MENU
+===================================== -->
+
+<div class="menu">
+
+<a href="../bbcs.html">
+🏠 Beranda
+</a>
+
+</div>
+
+
+<!-- =====================================
+     INPUT SIMPANAN
+===================================== -->
+
+<h3>
+💰 Input Simpanan
+</h3>
+
+
+<div class="form">
+
+
+<!-- =====================================
+     PILIH ANGGOTA
+===================================== -->
+
+<label for="pilihAnggotaSimpanan">
+Pilih Anggota
+</label>
+
+
+<select
+    id="pilihAnggotaSimpanan"
+>
+
+<option value="">
+Pilih Anggota
+</option>
+
+</select>
+
+
+<!-- =====================================
+     JENIS SIMPANAN
+===================================== -->
+
+<label for="jenisSimpanan">
+Jenis Simpanan
+</label>
+
+
+<select
+    id="jenisSimpanan"
+>
+
+<option value="Simpanan Pokok">
+Simpanan Pokok
+</option>
+
+<option value="Simpanan Wajib">
+Simpanan Wajib
+</option>
+
+<option value="Simpanan Sukarela">
+Simpanan Sukarela
+</option>
+
+</select>
+
+
+<!-- =====================================
+     JUMLAH SETORAN
+===================================== -->
+
+<label for="jumlahSimpanan">
+Jumlah Setoran
+</label>
+
+
+<input
+    id="jumlahSimpanan"
+    type="text"
+    placeholder="Jumlah Simpanan"
+    inputmode="numeric"
+    autocomplete="off"
+    oninput="formatJumlah(this)"
+>
+
+
+<br>
+
+
+<!-- =====================================
+     SIMPAN
+===================================== -->
+
+<button
+    type="button"
+    id="btnSimpanSimpanan"
+    onclick="simpanSimpanan()"
+>
+
+💾 SIMPAN SIMPANAN
+
+</button>
+
+
+</div>
+
+
+<!-- =====================================
+     INFORMASI
+===================================== -->
+
+<h3>
+📊 Informasi Simpanan
+</h3>
+
+
+<div
+    id="infoSimpanan"
+    class="info"
+>
+
+Silakan pilih anggota.
+
+</div>
+
+
+<!-- =====================================
+     DATABASE CORE
+===================================== -->
+
+<script
+    src="../js/core/database.js">
+</script>
+
+
+<!-- =====================================
+     HAK AKSES
+===================================== -->
+
+<script
+    src="../js/auth/hakakses.js">
+</script>
+
+
+<!-- =====================================
+     MODUL SIMPANAN
+===================================== -->
+
+<script
+    src="../js/simpanan/simpanan.js">
+</script>
+
+
+<!-- =====================================
+     INISIALISASI HALAMAN
+===================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        if(
+            typeof tampilPilihanAnggotaSimpanan ===
+            "function"
+        ){
+
+            tampilPilihanAnggotaSimpanan();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

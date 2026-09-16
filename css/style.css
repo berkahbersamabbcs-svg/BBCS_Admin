@@ -1,0 +1,569 @@
+/* =====================================
+   BERKAH BERSAMA CORE SYSTEM
+   STYLE CSS
+   VERSI REVISI BBCS V3.x
+===================================== */
+
+
+/* =====================================
+   RESET
+===================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+/* =====================================
+   BODY
+===================================== */
+
+body{
+    font-family:Arial, sans-serif;
+    background:#eef3f8;
+    color:#222;
+    padding:15px;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+header{
+    background:#123b5d;
+    color:#fff;
+    text-align:center;
+    padding:22px 15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:25px;
+}
+
+header h2{
+    font-size:18px;
+    margin-top:6px;
+}
+
+
+/* =====================================
+   MENU UTAMA
+===================================== */
+
+.menu{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.menu a,
+.menu button{
+    display:block;
+    width:100%;
+    background:#3182b8;
+    color:#fff;
+    text-decoration:none;
+    padding:15px 10px;
+    border-radius:10px;
+    border:1px solid #2873a5;
+    font-weight:bold;
+    text-align:center;
+    font-size:16px;
+    cursor:pointer;
+    box-shadow:0 2px 5px rgba(0,0,0,.12);
+}
+
+.menu a:hover,
+.menu button:hover{
+    background:#256d99;
+}
+
+
+/* =====================================
+   INPUT & SELECT
+===================================== */
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:8px;
+    border:1px solid #c8d2dc;
+    background:#fff;
+    color:#222;
+    font-size:16px;
+}
+
+input:focus,
+select:focus{
+    outline:2px solid #3182b8;
+}
+
+
+/* =====================================
+   BUTTON
+===================================== */
+
+button{
+    width:100%;
+    padding:12px 15px;
+    background:#3182b8;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#256d99;
+}
+
+
+/* =====================================
+   JUDUL
+===================================== */
+
+h3{
+    margin-top:15px;
+    margin-bottom:10px;
+    color:#123b5d;
+}
+
+
+/* =====================================
+   INFO / PANEL
+===================================== */
+
+.info{
+    background:#fff;
+    color:#222;
+    padding:16px;
+    margin-top:10px;
+    margin-bottom:15px;
+    border-radius:10px;
+    border:1px solid #d2dbe3;
+    line-height:1.7;
+    box-shadow:0 2px 5px rgba(0,0,0,.06);
+}
+
+.info h3,
+.info h4{
+    color:#123b5d;
+}
+
+.info b{
+    color:#123b5d;
+}
+
+
+/* =====================================
+   FORM
+===================================== */
+
+.form{
+    background:#fff;
+    color:#222;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid #d2dbe3;
+}
+
+
+/* =====================================
+   DASHBOARD
+===================================== */
+
+#dashboardInfo{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.card{
+    background:#fff;
+    color:#222;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid #d2dbe3;
+    text-align:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.06);
+}
+
+.card h3{
+    margin:0;
+    font-size:15px;
+    color:#555;
+}
+
+.card h2{
+    margin-top:10px;
+    font-size:22px;
+    color:#123b5d;
+}
+
+
+/* =====================================
+   TABEL LAPORAN
+===================================== */
+
+.tabelLaporan{
+    width:100%;
+    overflow-x:auto;
+    background:#fff;
+    border-radius:10px;
+    border:1px solid #d2dbe3;
+    box-shadow:0 2px 5px rgba(0,0,0,.06);
+}
+
+.tabelLaporan table{
+    min-width:850px;
+}
+
+.tabelLaporan th,
+.tabelLaporan td{
+    padding:9px;
+    text-align:left;
+    border:1px solid #d2dbe3;
+    color:#222;
+    background:#fff;
+    white-space:nowrap;
+}
+
+.tabelLaporan th{
+    background:#dcecf7;
+    color:#123b5d;
+    font-weight:bold;
+}
+
+
+/* =====================================
+   TABEL UMUM
+===================================== */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    color:#222;
+    margin-top:10px;
+}
+
+table th,
+table td{
+    padding:9px;
+    border:1px solid #d2dbe3;
+    text-align:left;
+    color:#222;
+    background:#fff;
+}
+
+table th{
+    background:#dcecf7;
+    color:#123b5d;
+    font-weight:bold;
+}
+
+
+/* =====================================
+   PANEL LAPORAN
+===================================== */
+
+.laporan-container{
+    max-width:950px;
+    margin:auto;
+}
+
+.laporan-header{
+    background:#123b5d;
+    color:#fff;
+    text-align:center;
+    padding:22px 15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+
+.laporan-header h2{
+    font-size:24px;
+    margin-bottom:6px;
+}
+
+.laporan-header p{
+    font-size:14px;
+    opacity:.95;
+}
+
+.laporan-panel{
+    display:none;
+    color:#222;
+}
+
+.laporan-panel.aktif{
+    display:block;
+}
+
+
+/* =====================================
+   MENU LAPORAN
+===================================== */
+
+.laporan-menu{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.laporan-menu button{
+    min-height:58px;
+    background:#3182b8;
+    color:#fff;
+    border:1px solid #2873a5;
+    border-radius:11px;
+    font-size:16px;
+    font-weight:bold;
+    box-shadow:0 2px 5px rgba(0,0,0,.12);
+}
+
+.laporan-menu button:hover{
+    background:#256d99;
+}
+
+
+/* =====================================
+   TOMBOL KEMBALI
+===================================== */
+
+.tombol-kembali{
+    width:auto;
+    display:inline-block;
+    padding:10px 16px;
+    margin-bottom:15px;
+    background:#123b5d;
+    color:#fff;
+    border-radius:8px;
+}
+
+
+/* =====================================
+   RINGKASAN ANGSURAN
+===================================== */
+
+#panelAngsuran .info{
+    background:#fff !important;
+    color:#222 !important;
+    border:1px solid #cbd6df;
+}
+
+#panelAngsuran .info h3{
+    color:#123b5d !important;
+}
+
+#panelAngsuran .info p{
+    color:#222 !important;
+    margin-bottom:7px;
+}
+
+#panelAngsuran .info b{
+    color:#123b5d !important;
+}
+
+#laporanJumlahAngsuran,
+#laporanAngsuranPokok,
+#laporanAngsuranJasa,
+#laporanAngsuranDenda,
+#laporanAngsuranTotal{
+    color:#123b5d !important;
+    font-weight:bold;
+}
+
+
+/* =====================================
+   RINGKASAN LAPORAN UTAMA
+===================================== */
+
+#panelRingkasan .info{
+    background:#fff !important;
+    color:#222 !important;
+}
+
+#panelRingkasan .info *{
+    color:#222;
+}
+
+
+/* =====================================
+   BACKUP
+===================================== */
+
+label[for="fileBackup"]{
+    display:inline-block;
+    padding:10px;
+    background:#3182b8;
+    color:#fff;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+
+/* =====================================
+   TOMBOL SIMPAN
+===================================== */
+
+.aksi-form{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.btn-simpan{
+    display:block;
+    width:100%;
+    min-height:52px;
+    padding:14px 18px;
+    font-size:17px;
+    font-weight:bold;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.btn-simpan:active{
+    transform:scale(.98);
+}
+
+
+/* =====================================
+   CETAK GLOBAL
+===================================== */
+
+#btnCetakLaporanGlobal{
+    color:#fff !important;
+    background:#3182b8 !important;
+    font-size:16px !important;
+    font-weight:bold !important;
+    padding:12px !important;
+    display:block !important;
+    width:100%;
+    opacity:1 !important;
+    visibility:visible !important;
+}
+
+
+/* =====================================
+   NERACA BBCS
+   KHUSUS HALAMAN KAS
+===================================== */
+
+.neraca-container{
+    width:100%;
+    margin:15px 0;
+}
+
+#neracaKeuangan{
+    width:100%;
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    overflow:hidden;
+}
+
+
+/* =====================================
+   TABEL NERACA
+===================================== */
+
+#neracaKeuangan .tabel-neraca{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+
+    border-collapse:collapse !important;
+
+    table-layout:fixed !important;
+
+    margin-bottom:20px;
+}
+
+#neracaKeuangan .tabel-neraca th,
+#neracaKeuangan .tabel-neraca td{
+
+    border:1px solid #ccc !important;
+
+    padding:10px !important;
+
+    display:table-cell !important;
+
+    visibility:visible !important;
+
+    opacity:1 !important;
+
+    color:#222 !important;
+
+    background:#fff !important;
+}
+
+
+/* =====================================
+   KOLOM AKUN
+===================================== */
+
+#neracaKeuangan .tabel-neraca th:first-child,
+#neracaKeuangan .tabel-neraca td:first-child{
+
+    width:60%;
+
+    text-align:left;
+
+}
+
+
+/* =====================================
+   KOLOM JUMLAH
+===================================== */
+
+#neracaKeuangan .tabel-neraca th:last-child,
+#neracaKeuangan .tabel-neraca td:last-child{
+
+    width:40%;
+
+    text-align:right !important;
+
+    color:#222 !important;
+
+    background:#fff !important;
+
+    font-weight:bold !important;
+
+    white-space:nowrap !important;
+
+    visibility:visible !important;
+
+    opacity:1 !important;
+
+    display:table-cell !important;
+}
+
+
+/* =====================================
+   TOTAL NERACA
+===================================== */
+
+#neracaKeuangan .total-neraca{
+
+    font-weight:bold !important;
+}
+
+#neracaKeuangan .total-neraca td{
+
+    color:#222 !important;
+
+    background
