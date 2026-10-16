@@ -1,240 +1,190 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBCS - Simpanan Anggota</title>
+    <link rel="stylesheet" href="../css/style.css">
 
-<meta charset="UTF-8">
+    <style>
+        .simpanan-form {
+            max-width: 650px;
+            margin: 16px auto;
+            padding: 16px;
+            box-sizing: border-box;
+        }
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+        .simpanan-form label {
+            display: block;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
 
-<title>
-BBCS - Simpanan Anggota
-</title>
+        .simpanan-form select,
+        .simpanan-form input {
+            display: block;
+            width: 100%;
+            min-height: 44px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
 
+        .simpanan-item {
+            margin: 14px 0;
+            padding: 12px;
+            border: 1px solid #cbd8e8;
+            border-radius: 10px;
+        }
 
-<!-- =====================================
-     BBCS CSS
-===================================== -->
+        .simpanan-item small {
+            display: block;
+            margin-top: 5px;
+            color: #555;
+        }
 
-<link
-    rel="stylesheet"
-    href="../css/style.css"
->
+        .simpanan-item input:disabled {
+            background: #e9ecef;
+            color: #555;
+        }
 
+        .total-simpanan {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 10px;
+            background: #e8f1ff;
+            color: #123e73;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #btnSimpanSimpanan {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 18px;
+            font-size: 16px;
+        }
+
+        #statusSP {
+            display: block;
+            margin-top: 6px;
+            font-size: 13px;
+        }
+    </style>
 </head>
-
 
 <body>
 
-
-<!-- =====================================
-     HEADER
-===================================== -->
-
 <header>
-
-<h1>
-BERKAH BERSAMA
-</h1>
-
-<h2>
-SIMPANAN ANGGOTA
-</h2>
-
-<p>
-CORE SYSTEM
-</p>
-
+    <h1>BERKAH BERSAMA</h1>
+    <h2>SIMPANAN ANGGOTA</h2>
+    <p>CORE SYSTEM</p>
 </header>
 
-
-<!-- =====================================
-     MENU
-===================================== -->
-
 <div class="menu">
+    <a href="../bbcs.html">🏠 Beranda</a>
+</div>
 
-<a href="../bbcs.html">
-🏠 Beranda
-</a>
+<h3>💰 Input Simpanan</h3>
+
+<div class="form simpanan-form">
+
+    <label for="pilihAnggotaSimpanan">
+        Pilih Anggota
+    </label>
+
+    <select id="pilihAnggotaSimpanan">
+        <option value="">Pilih Anggota</option>
+    </select>
+
+    <div class="simpanan-item">
+        <label for="jumlahSP">
+            Simpanan Pokok (SP)
+        </label>
+
+        <input
+            id="jumlahSP"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            value="0"
+            placeholder="Jumlah Simpanan Pokok"
+            oninput="formatJumlah(this); hitungTotalSimpanan();"
+        >
+
+        <small>
+            SP hanya dibayarkan satu kali per anggota.
+        </small>
+
+        <span id="statusSP">
+            Silakan pilih anggota.
+        </span>
+    </div>
+
+    <div class="simpanan-item">
+        <label for="jumlahSW">
+            Simpanan Wajib (SW)
+        </label>
+
+        <input
+            id="jumlahSW"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            value="0"
+            placeholder="Jumlah Simpanan Wajib"
+            oninput="formatJumlah(this); hitungTotalSimpanan();"
+        >
+    </div>
+
+    <div class="simpanan-item">
+        <label for="jumlahSS">
+            Simpanan Sukarela (SS)
+        </label>
+
+        <input
+            id="jumlahSS"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            value="0"
+            placeholder="Jumlah Simpanan Sukarela"
+            oninput="formatJumlah(this); hitungTotalSimpanan();"
+        >
+    </div>
+
+    <div class="total-simpanan">
+        Total Setoran:
+        <span id="totalSimpanan">Rp 0</span>
+    </div>
+
+    <button
+        type="button"
+        id="btnSimpanSimpanan"
+        onclick="simpanSimpanan()"
+    >
+        💾 SIMPAN SIMPANAN
+    </button>
 
 </div>
 
+<h3>📊 Informasi Simpanan</h3>
 
-<!-- =====================================
-     INPUT SIMPANAN
-===================================== -->
-
-<h3>
-💰 Input Simpanan
-</h3>
-
-
-<div class="form">
-
-
-<!-- =====================================
-     PILIH ANGGOTA
-===================================== -->
-
-<label for="pilihAnggotaSimpanan">
-Pilih Anggota
-</label>
-
-
-<select
-    id="pilihAnggotaSimpanan"
->
-
-<option value="">
-Pilih Anggota
-</option>
-
-</select>
-
-
-<!-- =====================================
-     JENIS SIMPANAN
-===================================== -->
-
-<label for="jenisSimpanan">
-Jenis Simpanan
-</label>
-
-
-<select
-    id="jenisSimpanan"
->
-
-<option value="Simpanan Pokok">
-Simpanan Pokok
-</option>
-
-<option value="Simpanan Wajib">
-Simpanan Wajib
-</option>
-
-<option value="Simpanan Sukarela">
-Simpanan Sukarela
-</option>
-
-</select>
-
-
-<!-- =====================================
-     JUMLAH SETORAN
-===================================== -->
-
-<label for="jumlahSimpanan">
-Jumlah Setoran
-</label>
-
-
-<input
-    id="jumlahSimpanan"
-    type="text"
-    placeholder="Jumlah Simpanan"
-    inputmode="numeric"
-    autocomplete="off"
-    oninput="formatJumlah(this)"
->
-
-
-<br>
-
-
-<!-- =====================================
-     SIMPAN
-===================================== -->
-
-<button
-    type="button"
-    id="btnSimpanSimpanan"
-    onclick="simpanSimpanan()"
->
-
-💾 SIMPAN SIMPANAN
-
-</button>
-
-
+<div id="infoSimpanan" class="info">
+    Silakan pilih anggota.
 </div>
 
-
-<!-- =====================================
-     INFORMASI
-===================================== -->
-
-<h3>
-📊 Informasi Simpanan
-</h3>
-
-
-<div
-    id="infoSimpanan"
-    class="info"
->
-
-Silakan pilih anggota.
-
-</div>
-
-
-<!-- =====================================
-     DATABASE CORE
-===================================== -->
-
-<script
-    src="../js/core/database.js">
-</script>
-
-
-<!-- =====================================
-     HAK AKSES
-===================================== -->
-
-<script
-    src="../js/auth/hakakses.js">
-</script>
-
-
-<!-- =====================================
-     MODUL SIMPANAN
-===================================== -->
-
-<script
-    src="../js/simpanan/simpanan.js">
-</script>
-
-
-<!-- =====================================
-     INISIALISASI HALAMAN
-===================================== -->
+<script src="../js/core/database.js"></script>
+<script src="../js/auth/hakakses.js"></script>
+<script src="../js/simpanan/simpanan.js"></script>
 
 <script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        if(
-            typeof tampilPilihanAnggotaSimpanan ===
-            "function"
-        ){
-
-            tampilPilihanAnggotaSimpanan();
-
-        }
-
-    }
-);
-
+document.addEventListener("DOMContentLoaded", function () {
+    tampilPilihanAnggotaSimpanan();
+    hitungTotalSimpanan();
+});
 </script>
 
-
 </body>
-
 </html>

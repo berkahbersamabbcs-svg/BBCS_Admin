@@ -1,511 +1,475 @@
-// =====================================
+// =============================================
 // BERKAH BERSAMA CORE SYSTEM
-// MODUL SIMPANAN BBCS
-// TERINTEGRASI TRANSAKSI + KAS
-// BAGIAN 1/2
-// =====================================
+// MODUL SIMPANAN ANGGOTA
+// SP + SW + SS DALAM SATU TRANSAKSI
+// DATABASE CORE TETAP TIDAK DIUBAH
+// =============================================
 
-console.log(
-    "Modul Simpanan BBCS Aktif"
-);
+console.log("Modul Simpanan BBCS Aktif");
 
+// =============================================
+// BANTUAN FORMAT DAN NILAI
+// =============================================
 
-// =====================================
-// PILIH ANGGOTA
-// =====================================
+function nilaiInputSimpanan(id) {
+    const elemen = document.getElementById(id);
 
-function tampilPilihanAnggotaSimpanan(){
-
-    let pilih =
-        document.getElementById(
-            "pilihAnggotaSimpanan"
-        );
-
-
-    if(!pilih){
-
-        return;
-
+    if (!elemen) {
+        return 0;
     }
 
-
-    pilih.innerHTML = `
-        <option value="">
-            Pilih Anggota
-        </option>
-    `;
-
-
-    if(
-        !Array.isArray(anggota)
-    ){
-
-        return;
-
+    if (typeof angkaNilai === "function") {
+        return angkaNilai(elemen.value);
     }
 
+    return Number(
+        String(elemen.value || "").replace(/\./g, "")
+    ) || 0;
+}
 
-    anggota.forEach(function(item){
+function formatRupiahSimpanan(nilai) {
+    if (typeof rupiah === "function") {
+        return rupiah(nilai);
+    }
 
-        if(
-            !item ||
-            !item.id
-        ){
+    return "Rp " + Number(nilai || 0).toLocaleString("id-ID");
+}
 
-            return;
+function idAnggotaDariSimpanan(data) {
+    return data
+        ? (data.idAnggota || data.anggota || "")
+        : "";
+}
 
+// =============================================
+// PEMERIKSAAN SIMPANAN POKOK
+// =============================================
+
+function anggotaSudahBayarSP(idAnggota, rek) {
+    // Periksa saldo SP pada rekening anggota.
+    if (rek && Number(rek.simpananPokok || 0) > 0) {
+        return true;
+    }
+
+    if (!Array.isArray(simpanan)) {
+        return false;
+    }
+
+    // Mendukung catatan lama dan catatan gabungan yang baru.
+    return simpanan.some(function (item) {
+        if (!item || idAnggotaDariSimpanan(item) != idAnggota) {
+            return false;
         }
 
-
-        pilih.innerHTML += `
-
-            <option value="${item.id}">
-
-                ${item.id} - ${item.nama}
-
-            </option>
-
-        `;
-
-    });
-
-}
-
-
-// =====================================
-// SIMPAN SETORAN
-// =====================================
-
-function simpanSimpanan(){
-
-    let pilih =
-        document.getElementById(
-            "pilihAnggotaSimpanan"
+        // Format gabungan: SP tersimpan pada kolom tersendiri.
+        const nilaiSP = Number(
+            item.sp ?? item.simpananPokok ?? 0
         );
 
+        if (Number.isFinite(nilaiSP) && nilaiSP > 0) {
+            return true;
+        }
 
-    if(!pilih){
+        // Format lama: SP tersimpan sebagai jenis dan jumlah.
+        const jenis = String(item.jenis || "")
+            .trim()
+            .toLowerCase();
 
-        return;
+        const jumlah = Number(item.jumlah || 0);
 
-    }
-
-
-    let idAnggota =
-        pilih.value;
-
-
-    // =================================
-    // VALIDASI ANGGOTA
-    // =================================
-
-    if(!idAnggota){
-
-        alert(
-            "Pilih anggota terlebih dahulu"
-        );
-
-        return;
-
-    }
-
-
-    // =================================
-    // JENIS SIMPANAN
-    // =================================
-
-    let jenisElement =
-        document.getElementById(
-            "jenisSimpanan"
-        );
-
-
-    if(!jenisElement){
-
-        alert(
-            "Jenis simpanan tidak ditemukan"
-        );
-
-        return;
-
-    }
-
-
-    let jenis =
-        jenisElement.value;
-
-
-    if(!jenis){
-
-        alert(
-            "Jenis simpanan belum dipilih"
-        );
-
-        return;
-
-    }
-
-
-    // =================================
-    // JUMLAH
-    // =================================
-
-    let jumlahElement =
-        document.getElementById(
-            "jumlahSimpanan"
-        );
-
-
-    if(!jumlahElement){
-
-        alert(
-            "Kolom jumlah simpanan tidak ditemukan"
-        );
-
-        return;
-
-    }
-
-
-    let jumlah =
-        angkaNilai(
-            jumlahElement.value
-        );
-
-
-    if(jumlah <= 0){
-
-        alert(
-            "Jumlah simpanan belum diisi"
-        );
-
-        return;
-
-    }
-
-
-    // =================================
-    // CARI ANGGOTA
-    // =================================
-
-    let dataAnggota =
-        anggota.find(function(item){
-
-            return (
-                item &&
-                item.id == idAnggota
+        return Number.isFinite(jumlah) &&
+            jumlah > 0 &&
+            (
+                jenis === "sp" ||
+                jenis.includes("simpanan pokok")
             );
+    });
+}
 
-        });
+// =============================================
+// PILIHAN ANGGOTA
+// =============================================
 
+function tampilPilihanAnggotaSimpanan() {
+    const pilih = document.getElementById("pilihAnggotaSimpanan");
 
-    if(!dataAnggota){
-
-        alert(
-            "Anggota tidak ditemukan"
-        );
-
+    if (!pilih) {
         return;
-
     }
 
+    pilih.innerHTML = '<option value="">Pilih Anggota</option>';
 
-    // =================================
-    // CARI REKENING
-    // =================================
-
-    let rek =
-        cariRekening(
-            idAnggota
-        );
-
-
-    if(!rek){
-
-        alert(
-            "Rekening tidak ditemukan"
-        );
-
+    if (!Array.isArray(anggota)) {
         return;
-
     }
 
+    anggota.forEach(function (item) {
+        if (!item || !item.id) {
+            return;
+        }
 
-    // =================================
-    // SINKRON NAMA REKENING
-    // =================================
-
-    rek.nama =
-        dataAnggota.nama;
-
-
-    let namaAnggota =
-        dataAnggota.nama;
-
-
-    // =================================
-    // KONFIRMASI
-    // =================================
-
-    let yakin =
-        confirm(
-
-            "Konfirmasi Simpanan\n\n" +
-
-            "ID     : " +
-            idAnggota +
-
-            "\nNama   : " +
-            namaAnggota +
-
-            "\nJenis  : " +
-            jenis +
-
-            "\nJumlah : " +
-            rupiah(jumlah) +
-
-            "\n\nData sudah benar?"
-
-        );
-
-
-    if(!yakin){
-
-        return;
-
-    }
-
-
-    // =================================
-    // UPDATE REKENING
-    // =================================
-
-    if(
-        jenis ==
-        "Simpanan Pokok"
-    ){
-
-        rek.simpananPokok =
-            Number(
-                rek.simpananPokok || 0
-            )
-            +
-            jumlah;
-
-    }
-
-
-    if(
-        jenis ==
-        "Simpanan Wajib"
-    ){
-
-        rek.simpananWajib =
-            Number(
-                rek.simpananWajib || 0
-            )
-            +
-            jumlah;
-
-    }
-
-
-    if(
-        jenis ==
-        "Simpanan Sukarela"
-    ){
-
-        rek.simpananSukarela =
-            Number(
-                rek.simpananSukarela || 0
-            )
-            +
-            jumlah;
-
-    }
-
-
-    // =================================
-    // NOMOR TRANSAKSI
-    // =================================
-
-    let idTransaksi =
-        nomorTransaksiBaru();
-
-
-    // =================================
-    // REFERENSI SIMPANAN
-    // =================================
-
-    let referensi =
-        "SP-" +
-        idTransaksi;
-
-
-    // =================================
-    // DATA SIMPANAN
-    // =================================
-
-    simpanan.push({
-
-        id:
-            idTransaksi,
-
-        idAnggota:
-            idAnggota,
-
-        anggota:
-            idAnggota,
-
-        namaAnggota:
-            namaAnggota,
-
-        nama:
-            namaAnggota,
-
-        jenis:
-            jenis,
-
-        jumlah:
-            jumlah,
-
-        tanggal:
-            new Date()
-                .toISOString()
-                .substring(0,10)
-
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = item.id + " - " + (item.nama || "-");
+        pilih.appendChild(option);
     });
 
+    pilih.onchange = function () {
+        persiapkanFormSimpanan();
+    };
 
-    // =====================================
-    // BAGIAN 1 SELESAI
-    // =====================================
-    // =====================================
-// TRANSAKSI + KAS BBCS
-// =====================================
-//
-// SATU JALUR UANG:
-//
-// SIMPANAN
-//     ↓
-// TRANSAKSI
-//     ↓
-// KAS
-//
-// TIDAK ADA kas.push() DI SINI
-// TIDAK ADA tambahTransaksi() DI SINI
-// =====================================
+    persiapkanFormSimpanan();
+}
 
+// =============================================
+// SIAPKAN FORM SESUAI ANGGOTA
+// =============================================
 
-// =====================================
-// CEK MESIN TRANSAKSI + KAS
-// =====================================
+function persiapkanFormSimpanan() {
+    const pilih = document.getElementById("pilihAnggotaSimpanan");
+    const inputSP = document.getElementById("jumlahSP");
+    const inputSW = document.getElementById("jumlahSW");
+    const inputSS = document.getElementById("jumlahSS");
+    const statusSP = document.getElementById("statusSP");
+    const info = document.getElementById("infoSimpanan");
 
-if(
-    typeof catatTransaksiKas !==
-    "function"
-){
+    if (!pilih || !inputSP || !inputSW || !inputSS) {
+        return;
+    }
 
+    const idAnggota = pilih.value;
+
+    inputSP.disabled = false;
+    inputSP.value = "0";
+    inputSW.value = "0";
+    inputSS.value = "0";
+
+    if (!idAnggota) {
+        if (statusSP) {
+            statusSP.textContent = "Silakan pilih anggota.";
+        }
+
+        if (info) {
+            info.textContent = "Silakan pilih anggota.";
+        }
+
+        hitungTotalSimpanan();
+        return;
+    }
+
+    const dataAnggota = anggota.find(function (item) {
+        return item && item.id == idAnggota;
+    });
+
+    const rek = typeof cariRekening === "function"
+        ? cariRekening(idAnggota)
+        : null;
+
+    const sudahSP = anggotaSudahBayarSP(idAnggota, rek);
+
+    if (sudahSP) {
+        inputSP.value = "0";
+        inputSP.disabled = true;
+
+        if (statusSP) {
+            statusSP.textContent =
+                "✅ SP sudah tercatat. Kolom SP dinonaktifkan.";
+        }
+    } else {
+        inputSP.value = "20.000";
+
+        if (statusSP) {
+            statusSP.textContent =
+                "SP belum tercatat. Nilai awal Rp20.000.";
+        }
+    }
+
+    inputSW.value = "5.000";
+    inputSS.value = "0";
+
+    if (info) {
+        const nama = dataAnggota
+            ? (dataAnggota.nama || "-")
+            : "-";
+
+        const pokok = rek ? Number(rek.simpananPokok || 0) : 0;
+        const wajib = rek ? Number(rek.simpananWajib || 0) : 0;
+        const sukarela = rek ? Number(rek.simpananSukarela || 0) : 0;
+
+        info.textContent =
+            "Anggota: " + nama +
+            " | SP: " + formatRupiahSimpanan(pokok) +
+            " | SW: " + formatRupiahSimpanan(wajib) +
+            " | SS: " + formatRupiahSimpanan(sukarela) +
+            " | Total: " +
+            formatRupiahSimpanan(pokok + wajib + sukarela);
+    }
+
+    hitungTotalSimpanan();
+}
+
+// =============================================
+// TOTAL OTOMATIS
+// =============================================
+
+function hitungTotalSimpanan() {
+    const total = nilaiInputSimpanan("jumlahSP") +
+        nilaiInputSimpanan("jumlahSW") +
+        nilaiInputSimpanan("jumlahSS");
+
+    const tempat = document.getElementById("totalSimpanan");
+
+    if (tempat) {
+        tempat.textContent = formatRupiahSimpanan(total);
+    }
+
+    return total;
+}
+
+// =============================================
+// SIMPAN SIMPANAN GABUNGAN
+// =============================================
+
+function simpanSimpanan() {
+    const pilih = document.getElementById("pilihAnggotaSimpanan");
+
+    if (!pilih || !pilih.value) {
+        alert("Pilih anggota terlebih dahulu.");
+        return;
+    }
+
+    if (
+        !Array.isArray(anggota) ||
+        !Array.isArray(rekening) ||
+        !Array.isArray(simpanan) ||
+        !Array.isArray(transaksi) ||
+        !Array.isArray(kas)
+    ) {
+        alert("Database BBCS belum siap. Tidak ada perubahan yang dilakukan.");
+        return;
+    }
+
+    if (
+        typeof cariRekening !== "function" ||
+        typeof nomorTransaksiBaru !== "function" ||
+        typeof catatTransaksiKas !== "function" ||
+        typeof simpanDatabaseAman !== "function"
+    ) {
+        alert("Mesin rekening, transaksi, kas, atau penyimpanan belum aktif.");
+        return;
+    }
+
+    const idAnggota = pilih.value;
+
+    const dataAnggota = anggota.find(function (item) {
+        return item && item.id == idAnggota;
+    });
+
+    const rek = cariRekening(idAnggota);
+
+    if (!dataAnggota) {
+        alert("Data anggota tidak ditemukan.");
+        return;
+    }
+
+    if (!rek) {
+        alert("Rekening anggota tidak ditemukan. Tidak ada perubahan yang dilakukan.");
+        return;
+    }
+
+    const sp = nilaiInputSimpanan("jumlahSP");
+    const sw = nilaiInputSimpanan("jumlahSW");
+    const ss = nilaiInputSimpanan("jumlahSS");
+    const total = sp + sw + ss;
+
+    if (
+        !Number.isSafeInteger(sp) ||
+        !Number.isSafeInteger(sw) ||
+        !Number.isSafeInteger(ss) ||
+        sp < 0 ||
+        sw < 0 ||
+        ss < 0
+    ) {
+        alert("Jumlah simpanan harus berupa angka rupiah yang valid.");
+        return;
+    }
+
+    if (total <= 0) {
+        alert("Isi minimal satu jenis simpanan dengan jumlah lebih dari Rp0.");
+        return;
+    }
+
+    if (sp > 0 && anggotaSudahBayarSP(idAnggota, rek)) {
+        alert("Simpanan Pokok anggota ini sudah tercatat. SP tidak dapat ditambahkan lagi.");
+        persiapkanFormSimpanan();
+        return;
+    }
+
+    const namaAnggota = dataAnggota.nama || "-";
+
+    let rincian = "";
+
+    if (sp > 0) {
+        rincian += "SP: " + formatRupiahSimpanan(sp) + "\n";
+    }
+
+    if (sw > 0) {
+        rincian += "SW: " + formatRupiahSimpanan(sw) + "\n";
+    }
+
+    if (ss > 0) {
+        rincian += "SS: " + formatRupiahSimpanan(ss) + "\n";
+    }
+
+    const yakin = confirm(
+        "KONFIRMASI SIMPANAN BBCS\n\n" +
+        "ID Anggota: " + idAnggota + "\n" +
+        "Nama: " + namaAnggota + "\n\n" +
+        rincian + "\n" +
+        "TOTAL SETORAN: " + formatRupiahSimpanan(total) +
+        "\n\nSimpan seluruh setoran dalam satu transaksi?"
+    );
+
+    if (!yakin) {
+        return;
+    }
+
+    // Simpan nilai awal untuk pemulihan jika penyimpanan gagal.
+    const saldoAwal = {
+        nama: rek.nama,
+        sp: rek.simpananPokok,
+        sw: rek.simpananWajib,
+        ss: rek.simpananSukarela
+    };
+
+    const panjangSimpanan = simpanan.length;
+    const panjangTransaksi = transaksi.length;
+    const panjangKas = kas.length;
+
+    const idTransaksi = nomorTransaksiBaru();
+    const referensi = "SP-" + idTransaksi;
+
+    // Tolak referensi yang sudah digunakan.
+    // Pemeriksaan ini dilakukan sebelum saldo atau data diubah.
+    const referensiSudahAda =
+        simpanan.some(item => item && item.referensi === referensi) ||
+        transaksi.some(item => item && item.referensi === referensi) ||
+        kas.some(item => item && item.referensi === referensi);
+
+    if (referensiSudahAda) {
+        alert(
+            "Penyimpanan dibatalkan karena referensi transaksi sudah digunakan. " +
+            "Silakan periksa data transaksi sebelum mencoba kembali."
+        );
+        console.error("Referensi simpanan sudah ada:", referensi);
+        return;
+    }
+
+    const tanggal = new Date().toISOString().substring(0, 10);
+
+    // Siapkan saldo rekening.
+    rek.nama = namaAnggota;
+
+    rek.simpananPokok =
+        Number(rek.simpananPokok || 0) + sp;
+
+    rek.simpananWajib =
+        Number(rek.simpananWajib || 0) + sw;
+
+    rek.simpananSukarela =
+        Number(rek.simpananSukarela || 0) + ss;
+
+    // Satu transaksi anggota = satu catatan simpanan gabungan.
+    // Rincian SP, SW, dan SS tetap disimpan pada objek yang sama.
+    simpanan.push({
+        id: idTransaksi,
+        idTransaksi: idTransaksi,
+        idAnggota: idAnggota,
+        anggota: idAnggota,
+        namaAnggota: namaAnggota,
+        nama: namaAnggota,
+        jenis: "Simpanan Gabungan",
+        sp: sp,
+        sw: sw,
+        ss: ss,
+        simpananPokok: sp,
+        simpananWajib: sw,
+        simpananSukarela: ss,
+        jumlah: total,
+        tanggal: tanggal,
+        referensi: referensi
+    });
+
+    const keterangan =
+        "Simpanan anggota " + namaAnggota +
+        " (SP " + formatRupiahSimpanan(sp) +
+        ", SW " + formatRupiahSimpanan(sw) +
+        ", SS " + formatRupiahSimpanan(ss) + ")";
+
+    let hasil = null;
+
+    try {
+        // Satu kali pencatatan pemasukan untuk total seluruh simpanan.
+        hasil = catatTransaksiKas(
+            "Pemasukan",
+            "Simpanan",
+            keterangan,
+            total,
+            idAnggota,
+            namaAnggota,
+            referensi
+        );
+    } catch (error) {
+        console.error("Kesalahan pencatatan simpanan:", error);
+    }
+
+    if (
+        !hasil ||
+        !hasil.transaksi ||
+        !hasil.kas
+    ) {
+        // Pulihkan perubahan di memori jika pencatatan gagal.
+        rek.nama = saldoAwal.nama;
+        rek.simpananPokok = saldoAwal.sp;
+        rek.simpananWajib = saldoAwal.sw;
+        rek.simpananSukarela = saldoAwal.ss;
+
+        simpanan.length = panjangSimpanan;
+        transaksi.length = panjangTransaksi;
+        kas.length = panjangKas;
+
+        const pemulihanBerhasil = simpanDatabaseAman();
+
+        console.error(
+            "Pencatatan simpanan gagal. Pemulihan database:",
+            pemulihanBerhasil
+        );
+
+        alert(
+            "Simpanan belum berhasil dicatat.\n" +
+            "Perubahan di memori telah dibatalkan.\n\n" +
+            (
+                pemulihanBerhasil
+                    ? "Data sebelumnya berhasil disimpan kembali."
+                    : "PERHATIAN: penyimpanan pemulihan gagal. Jangan ulangi transaksi sebelum database diperiksa."
+            )
+        );
+
+        return;
+    }
+
+    // Transaksi + kas telah menyimpan database melalui satu pintu.
     alert(
-        "Mesin Transaksi + Kas belum aktif"
+        "SIMPANAN BERHASIL DISIMPAN\n\n" +
+        "Anggota: " + namaAnggota + "\n" +
+        rincian + "\n" +
+        "Total: " + formatRupiahSimpanan(total) + "\n\n" +
+        "Satu transaksi pemasukan dan satu pencatatan kas telah dibuat."
     );
 
-    console.error(
-        "catatTransaksiKas() tidak ditemukan"
-    );
-
-    return;
-
+    // Bersihkan formulir setelah transaksi berhasil.
+    pilih.value = "";
+    persiapkanFormSimpanan();
 }
 
-
-// =====================================
-// CATAT TRANSAKSI + KAS
-// =====================================
-
-catatTransaksiKas(
-
-    "Pemasukan",
-
-    "Simpanan",
-
-    jenis +
-    " - " +
-    namaAnggota,
-
-    jumlah,
-
-    idAnggota,
-
-    namaAnggota,
-
-    referensi
-
-);
-
-
-// =====================================
-// SINKRONISASI DATA
-// =====================================
-
-if(
-    typeof sinkronSemuaData ===
-    "function"
-){
-
-    sinkronSemuaData();
-
-}
-
-
-// =====================================
-// SIMPAN DATABASE
-// =====================================
-
-simpanDatabaseAman();
-
-
-// =====================================
-// RESET FORM
-// =====================================
-
-pilih.selectedIndex =
-    0;
-
-
-jenisElement.selectedIndex =
-    0;
-
-
-jumlahElement.value =
-    "";
-
-
-// =====================================
-// PESAN BERHASIL
-// =====================================
-
-alert(
-    "Simpanan berhasil disimpan\n\n" +
-
-    "Transaksi tercatat\n" +
-
-    "Kas bertambah " +
-    rupiah(jumlah)
-);
-
-
-// =====================================
-// PENUTUP FUNGSI
-// =====================================
-
-}
-
-
-// =====================================
-// MODUL SELESAI
-// =====================================
-
-console.log(
-    "Modul Simpanan BBCS Siap"
-);
+console.log("Mesin Simpanan BBCS Siap");
