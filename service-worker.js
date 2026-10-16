@@ -1,9 +1,9 @@
 // =====================================
 // BERKAH BERSAMA CORE SYSTEM
-// SERVICE WORKER BBCS V2.2
+// SERVICE WORKER BBCS V2.3
 // =====================================
 
-const CACHE_NAME = "bbcs-admin-v1";
+const CACHE_NAME = "bbcs-admin-v2";
 
 
 // =====================================
@@ -116,13 +116,12 @@ const FILES = [
     "./Laporan BBCS/laporan_angsuran.js",
     "./Laporan BBCS/laporan_pinjaman.js",
     "./Laporan BBCS/laporan_cetak.js",
-    "./Laporan BBCS/laporan_global.js",
+    "./Laporan BBCS/laporan_riwayat_global.js",
     "./Laporan BBCS/laporan_ringkasan.js",
     "./Laporan BBCS/laporan_pendapatan.js",
     "./Laporan BBCS/laporan_investor.js",
     "./Laporan BBCS/laporan_simpanan.js",
     "./Laporan BBCS/laporan_transaksi.js",
-    "./Laporan BBCS/laporan_riwayat_global.js"
 
 ];
 
@@ -134,7 +133,7 @@ const FILES = [
 self.addEventListener("install", event => {
 
     console.log(
-        "Service Worker BBCS V2.2 sedang install..."
+        "Service Worker BBCS V2.3 sedang install..."
     );
 
     event.waitUntil(
@@ -151,7 +150,7 @@ self.addEventListener("install", event => {
                     try {
 
                         const response =
-                            await fetch(file);
+                            await fetch(file, { cache: "reload" });
 
                         if (
                             response.ok
@@ -199,7 +198,7 @@ self.addEventListener("install", event => {
                 );
 
                 console.log(
-                    "BBCS V2.2 CACHE SELESAI"
+                    "BBCS V2.3 CACHE SELESAI"
                 );
 
                 console.log(
@@ -236,7 +235,7 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
 
     console.log(
-        "Service Worker BBCS V2.2 aktif"
+        "Service Worker BBCS V2.3 aktif"
     );
 
     event.waitUntil(
@@ -251,6 +250,7 @@ self.addEventListener("activate", event => {
 
                         .filter(
                             cacheName =>
+                                cacheName.startsWith("bbcs-admin-") &&
                                 cacheName !== CACHE_NAME
                         )
 
@@ -290,55 +290,62 @@ self.addEventListener("activate", event => {
 // =====================================
 
 self.addEventListener("fetch", event => {
+    const request = event.request;
 
-    event.respondWith(
+    // Jangan mengintersep POST, PUT, DELETE, atau metode lain.
+    if (request.method !== "GET") {
+        return;
+    }
 
-        caches.match(event.request)
+    const url = new URL(request.url);
 
-            .then(response => {
+    // Jangan mengintersep permintaan lintas origin.
+    if (url.origin !== self.location.origin) {
+        return;
+    }
 
-                if (response) {
+    // Cache hanya halaman navigasi dan aset statis yang dikenal.
+    const isNavigation = request.mode === "navigate";
+    const isStaticAsset =
+        /\.(?:html?|js|css|png|svg|jpe?g|webp|ico|woff2?)$/i
+            .test(url.pathname) ||
+        /\/manifest\.json$/i.test(url.pathname);
 
-                    return response;
+    if (!isNavigation && !isStaticAsset) {
+        return;
+    }
 
-                }
+    event.respondWith((async () => {
+        const cache = await caches.open(CACHE_NAME);
 
-                return fetch(event.request)
+        // Utamakan cache milik BBCS Admin saja.
+        const cachedResponse = await cache.match(request);
 
-                    .then(networkResponse => {
+        if (cachedResponse) {
+            return cachedResponse;
+        }
 
-                        if (
-                            !networkResponse ||
-                            networkResponse.status !== 200 ||
-                            networkResponse.type === "opaque"
-                        ) {
+        try {
+            const networkResponse = await fetch(request);
 
-                            return networkResponse;
+            if (
+                networkResponse &&
+                networkResponse.ok &&
+                networkResponse.type === "basic"
+            ) {
+                await cache.put(
+                    request,
+                    networkResponse.clone()
+                );
+            }
 
-                        }
-
-                        const clone =
-                            networkResponse.clone();
-
-                        caches.open(CACHE_NAME)
-
-                            .then(cache => {
-
-                                cache.put(
-                                    event.request,
-                                    clone
-                                );
-
-                            });
-
-                        return networkResponse;
-
-                    });
-
-            })
-
-    );
-
+            return networkResponse;
+        } catch (error) {
+            // Jika offline dan tidak ada cache, tampilkan kegagalan
+            // jaringan secara normal tanpa menghapus data aplikasi.
+            throw error;
+        }
+    })());
 });
 
 
@@ -361,5 +368,5 @@ self.addEventListener("message", event => {
 
 
 console.log(
-    "SERVICE WORKER BBCS V2.2 SIAP"
+    "SERVICE WORKER BBCS V2.3 SIAP"
 );
