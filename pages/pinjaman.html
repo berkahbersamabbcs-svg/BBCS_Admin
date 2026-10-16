@@ -133,7 +133,7 @@ BBCS - Data Pinjaman
     oninput="
         ubahTampilanTarifAdministrasiBBCS();
     "
->
+ value="2">
 
 
 <label for="biayaAdministrasiPinjaman">
@@ -175,7 +175,7 @@ BBCS - Data Pinjaman
     min="0"
     placeholder="Contoh: 5"
     autocomplete="off"
->
+ value="5">
 
 
 <!-- =====================================
@@ -193,7 +193,7 @@ BBCS - Data Pinjaman
     min="0"
     placeholder="Contoh: 2"
     autocomplete="off"
->
+ value="2.5">
 
 
 <!-- =====================================
@@ -212,6 +212,17 @@ BBCS - Data Pinjaman
 
 </div>
 
+
+<!-- =====================================
+     DAFTAR PINJAMAN
+===================================== -->
+
+<section class="daftar-pinjaman" aria-labelledby="judulDaftarPinjaman">
+    <h3 id="judulDaftarPinjaman">📋 Daftar Pinjaman</h3>
+    <div id="daftarPinjaman" aria-live="polite">
+        Memuat data pinjaman...
+    </div>
+</section>
 
 <!-- =====================================
      DATABASE CORE
@@ -273,6 +284,11 @@ document.addEventListener(
         }
 
 
+
+        // Tampilkan daftar pinjaman yang sudah tersimpan
+        if (typeof tampilPinjaman === "function") {
+            tampilPinjaman();
+        }
 
         hitungTampilanAdministrasiBBCS();
 
@@ -336,9 +352,7 @@ function hitungTampilanAdministrasiBBCS(){
 
 
     const hasil =
-        window.hitungAdministrasiPinjamanBBCS(
-            jumlah
-        );
+        window.hitungAdministrasiDenganTarifBBCS(jumlah, Number(document.getElementById("tarifAdministrasiPinjaman").value || 2));
 
 
     biayaField.value =

@@ -272,47 +272,69 @@ function simpanPinjaman(){
 
 
     // =====================================
-    // CEK MESIN ADMINISTRASI
+    // CEK DAN HITUNG ADMINISTRASI
     // =====================================
 
-    if(
-        typeof window.hitungAdministrasiPinjamanBBCS !==
-        "function"
-    ){
+if (
+    typeof window.hitungAdministrasiDenganTarifBBCS !== "function"
+) {
+    alert("Mesin perhitungan administrasi pinjaman belum aktif.");
+    console.error(
+        "hitungAdministrasiDenganTarifBBCS() tidak ditemukan"
+    );
+    return;
+}
 
-        alert(
-            "Mesin Administrasi Pinjaman belum aktif"
-        );
+const elemenTarifAdministrasi =
+    document.getElementById("tarifAdministrasiPinjaman");
 
-        console.error(
-            "hitungAdministrasiPinjamanBBCS() tidak ditemukan"
-        );
+const tarifInputAdministrasi =
+    elemenTarifAdministrasi
+        ? Number(elemenTarifAdministrasi.value)
+        : NaN;
 
-        return;
+if (
+    !Number.isFinite(tarifInputAdministrasi) ||
+    tarifInputAdministrasi < 0
+) {
+    alert("Tarif administrasi harus berupa angka 0 atau lebih.");
+    return;
+}
 
-    }
+const hasilAdministrasi =
+    window.hitungAdministrasiDenganTarifBBCS(
+        jumlah,
+        tarifInputAdministrasi
+    );
 
+if (
+    !hasilAdministrasi ||
+    !Number.isFinite(Number(hasilAdministrasi.pokok)) ||
+    !Number.isFinite(Number(hasilAdministrasi.tarifAdministrasi)) ||
+    !Number.isFinite(Number(hasilAdministrasi.biayaAdministrasi)) ||
+    !Number.isFinite(Number(hasilAdministrasi.uangDiterima)) ||
+    Number(hasilAdministrasi.pokok) !== Number(jumlah) ||
+    Number(hasilAdministrasi.biayaAdministrasi) < 0 ||
+    Number(hasilAdministrasi.uangDiterima) < 0 ||
+    Number(hasilAdministrasi.biayaAdministrasi) +
+        Number(hasilAdministrasi.uangDiterima) !== Number(jumlah)
+) {
+    alert("Hasil perhitungan administrasi tidak valid. Pinjaman dibatalkan.");
+    console.error(
+        "Hasil administrasi pinjaman tidak valid:",
+        hasilAdministrasi
+    );
+    return;
+}
 
-    // =====================================
-    // HITUNG ADMINISTRASI
-    // =====================================
+const tarifAdministrasi =
+    Number(hasilAdministrasi.tarifAdministrasi);
 
-    const hasilAdministrasi =
-        window.hitungAdministrasiPinjamanBBCS(
-            jumlah
-        );
+const biayaAdministrasi =
+    Number(hasilAdministrasi.biayaAdministrasi);
 
-
-    const tarifAdministrasi =
-        hasilAdministrasi.tarifAdministrasi;
-
-
-    const biayaAdministrasi =
-        hasilAdministrasi.biayaAdministrasi;
-
-
-    const uangDiterima =
-        hasilAdministrasi.uangDiterima;
+const uangDiterima =
+    Number(hasilAdministrasi.uangDiterima);
 
 
     // =====================================
@@ -413,10 +435,105 @@ function simpanPinjaman(){
     let idPinjaman =
         nomorPinjamanBaru();
 
+    // =====================================
+    // CEGAH ID DAN REFERENSI PINJAMAN GANDA
+    // =====================================
+
+    if (
+        !Array.isArray(pinjaman) ||
+        !Array.isArray(transaksi) ||
+        !Array.isArray(kas)
+    ) {
+        alert(
+            "Data pinjaman, transaksi, atau kas belum siap. " +
+            "Proses dibatalkan."
+        );
+        console.error(
+            "Validasi referensi pinjaman gagal: array tidak tersedia."
+        );
+        return;
+    }
+
+    const referensiPencairanBBCS = idPinjaman;
+    const referensiAdministrasiBBCS = idPinjaman + "-ADMIN";
+
+    const idPinjamanSudahAdaBBCS = pinjaman.some(function(item) {
+        return item && item.id === idPinjaman;
+    });
+
+    const referensiPencairanSudahAdaBBCS =
+        transaksi.some(function(item) {
+            return item &&
+                item.referensi === referensiPencairanBBCS;
+        }) ||
+        kas.some(function(item) {
+            return item &&
+                item.referensi === referensiPencairanBBCS;
+        });
+
+    const referensiAdministrasiSudahAdaBBCS =
+        Number(biayaAdministrasi) > 0 &&
+        (
+            transaksi.some(function(item) {
+                return item &&
+                    item.referensi === referensiAdministrasiBBCS;
+            }) ||
+            kas.some(function(item) {
+                return item &&
+                    item.referensi === referensiAdministrasiBBCS;
+            })
+        );
+
+    if (
+        idPinjamanSudahAdaBBCS ||
+        referensiPencairanSudahAdaBBCS ||
+        referensiAdministrasiSudahAdaBBCS
+    ) {
+        console.error(
+            "Pinjaman dibatalkan karena ID atau referensi sudah digunakan.",
+            {
+                idPinjaman: idPinjaman,
+                idPinjamanSudahAda: idPinjamanSudahAdaBBCS,
+                referensiPencairanSudahAda:
+                    referensiPencairanSudahAdaBBCS,
+                referensiAdministrasiSudahAda:
+                    referensiAdministrasiSudahAdaBBCS
+            }
+        );
+
+        alert(
+            "Pinjaman dibatalkan untuk mencegah transaksi ganda.\n\n" +
+            "ID/referensi: " + idPinjaman + "\n" +
+            "Jangan hapus catatan lama atau ulangi pencairan. " +
+            "Periksa data pinjaman, transaksi, dan kas terlebih dahulu."
+        );
+        return;
+    }
+
 
     // =====================================
     // DATA PINJAMAN
     // =====================================
+
+if(
+        typeof catatTransaksiKas !==
+        "function"
+    ){
+
+        alert(
+            "Mesin Transaksi + Kas belum aktif"
+        );
+
+        console.error(
+            "catatTransaksiKas() tidak ditemukan"
+        );
+
+        return;
+
+    }
+
+
+
 
     let dataPinjaman = {
 
@@ -512,6 +629,40 @@ function simpanPinjaman(){
 
 
     // =====================================
+    // SNAPSHOT SEBELUM MUTASI PINJAMAN
+    // =====================================
+
+    if (
+        !Array.isArray(pinjaman) ||
+        !Array.isArray(rekening) ||
+        !Array.isArray(transaksi) ||
+        !Array.isArray(kas) ||
+        typeof simpanDatabaseAman !== "function"
+    ) {
+        alert("Mesin penyimpanan BBCS belum siap. Pinjaman dibatalkan.");
+        return;
+    }
+
+    let snapshotSimpanPinjamanBBCS;
+
+    try {
+        snapshotSimpanPinjamanBBCS = {
+            anggota: JSON.parse(JSON.stringify(anggota)),
+            rekening: JSON.parse(JSON.stringify(rekening)),
+            simpanan: JSON.parse(JSON.stringify(simpanan)),
+            transaksi: JSON.parse(JSON.stringify(transaksi)),
+            pinjaman: JSON.parse(JSON.stringify(pinjaman)),
+            riwayatAngsuran: JSON.parse(JSON.stringify(riwayatAngsuran)),
+            kas: JSON.parse(JSON.stringify(kas)),
+            dataCetakSebelumnya: localStorage.getItem("dataCetak")
+        };
+    } catch (error) {
+        console.error("Snapshot pinjaman gagal:", error);
+        alert("Data awal tidak dapat diamankan. Pinjaman dibatalkan.");
+        return;
+    }
+
+    // =====================================
     // SIMPAN DATA PINJAMAN
     // =====================================
 
@@ -553,25 +704,7 @@ function simpanPinjaman(){
     // CEK MESIN TRANSAKSI + KAS
     // =====================================
 
-    if(
-        typeof catatTransaksiKas !==
-        "function"
-    ){
-
-        alert(
-            "Mesin Transaksi + Kas belum aktif"
-        );
-
-        console.error(
-            "catatTransaksiKas() tidak ditemukan"
-        );
-
-        return;
-
-    }
-
-
-    // =====================================
+        // =====================================
     // KAS KELUAR
     // =====================================
     //
@@ -586,7 +719,8 @@ function simpanPinjaman(){
     //
     // =====================================
 
-    catatTransaksiKas(
+    const hasilKasPencairanBBCS =
+        catatTransaksiKas(
 
         "Pengeluaran",
 
@@ -624,6 +758,8 @@ function simpanPinjaman(){
 //
 // =================================
 
+let hasilKasAdministrasiBBCS = true;
+
 if(
     biayaAdministrasi > 0
 ){
@@ -632,7 +768,8 @@ if(
         idPinjaman + "-ADMIN";
 
 
-    catatTransaksiKas(
+    hasilKasAdministrasiBBCS =
+        catatTransaksiKas(
 
         "Pemasukan",
 
@@ -655,9 +792,127 @@ if(
 
 }
 
-    console.log(
-        "Transaksi + Kas Pinjaman berhasil dicatat"
-    );
+    // =====================================
+
+    // =====================================
+    // VALIDASI DETAIL HASIL TRANSAKSI KAS
+    // =====================================
+
+    function validasiHasilKasPinjamanBBCS(
+        hasil,
+        jenisDiharapkan,
+        kategoriDiharapkan,
+        jumlahDiharapkan,
+        referensiDiharapkan
+    ) {
+        if (
+            !hasil ||
+            !hasil.transaksi ||
+            !hasil.kas ||
+            !Array.isArray(transaksi) ||
+            !Array.isArray(kas)
+        ) {
+            return false;
+        }
+
+        const dataTransaksiBBCS = hasil.transaksi;
+        const dataKasBBCS = hasil.kas;
+        const nominalDiharapkan = Number(jumlahDiharapkan);
+
+        if (
+            !Number.isFinite(nominalDiharapkan) ||
+            nominalDiharapkan <= 0 ||
+            typeof referensiDiharapkan !== "string" ||
+            referensiDiharapkan.length === 0
+        ) {
+            return false;
+        }
+
+        function dataSesuaiBBCS(item) {
+            return Boolean(
+                item &&
+                item.referensi === referensiDiharapkan &&
+                item.jenis === jenisDiharapkan &&
+                item.kategori === kategoriDiharapkan &&
+                Number.isFinite(Number(item.jumlah)) &&
+                Number(item.jumlah) === nominalDiharapkan &&
+                item.id
+            );
+        }
+
+        if (
+            !dataSesuaiBBCS(dataTransaksiBBCS) ||
+            !dataSesuaiBBCS(dataKasBBCS)
+        ) {
+            return false;
+        }
+
+        const transaksiDenganReferensiBBCS =
+            transaksi.filter(function(item) {
+                return item &&
+                    item.referensi === referensiDiharapkan;
+            });
+
+        const kasDenganReferensiBBCS =
+            kas.filter(function(item) {
+                return item &&
+                    item.referensi === referensiDiharapkan;
+            });
+
+        if (
+            transaksiDenganReferensiBBCS.length !== 1 ||
+            kasDenganReferensiBBCS.length !== 1
+        ) {
+            return false;
+        }
+
+        const transaksiTersimpanBBCS =
+            transaksiDenganReferensiBBCS[0];
+
+        const kasTersimpanBBCS =
+            kasDenganReferensiBBCS[0];
+
+        if (
+            transaksiTersimpanBBCS.id !== dataTransaksiBBCS.id ||
+            kasTersimpanBBCS.id !== dataKasBBCS.id
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // VALIDASI HASIL KEDUA TRANSAKSI KAS
+    // =====================================
+
+    const pencairanKasValidBBCS =
+        validasiHasilKasPinjamanBBCS(
+            hasilKasPencairanBBCS,
+            "Pengeluaran",
+            "Pinjaman",
+            jumlah,
+            idPinjaman
+        );
+
+    const administrasiKasValidBBCS =
+        biayaAdministrasi <= 0 ||
+        validasiHasilKasPinjamanBBCS(
+            hasilKasAdministrasiBBCS,
+            "Pemasukan",
+            "Pendapatan Administrasi",
+            biayaAdministrasi,
+            idPinjaman + "-ADMIN"
+        );
+
+    if (
+        !pencairanKasValidBBCS ||
+        !administrasiKasValidBBCS
+    ) {
+        pulihkanPinjamanSetelahGagalBBCS(
+            "Pencatatan kas pinjaman gagal."
+        );
+        return;
+    }
 
 
     // =====================================
@@ -721,39 +976,276 @@ if(
 
 
     // =====================================
+    // PEMULIHAN JIKA SIMPAN / SINKRON GAGAL
+    // =====================================
+
+    function pulihkanPinjamanSetelahGagalBBCS(alasan) {
+        console.error("Proses pinjaman dibatalkan:", alasan);
+
+        let arrayPulihBBCS = false;
+        let cetakPulihBBCS = false;
+        let databasePulihBBCS = false;
+        let verifikasiStorageBBCS = false;
+
+        const daftarArrayPulihBBCS = [
+            ["anggota", anggota, snapshotSimpanPinjamanBBCS.anggota],
+            ["rekening", rekening, snapshotSimpanPinjamanBBCS.rekening],
+            ["simpanan", simpanan, snapshotSimpanPinjamanBBCS.simpanan],
+            ["transaksi", transaksi, snapshotSimpanPinjamanBBCS.transaksi],
+            ["pinjaman", pinjaman, snapshotSimpanPinjamanBBCS.pinjaman],
+            [
+                "riwayatAngsuran",
+                riwayatAngsuran,
+                snapshotSimpanPinjamanBBCS.riwayatAngsuran
+            ],
+            ["kas", kas, snapshotSimpanPinjamanBBCS.kas]
+        ];
+
+        try {
+            for (const data of daftarArrayPulihBBCS) {
+                const target = data[1];
+                const sumber = data[2];
+
+                if (!Array.isArray(target) || !Array.isArray(sumber)) {
+                    throw new Error(
+                        "Array tidak valid: " + data[0]
+                    );
+                }
+
+                const salinan = JSON.parse(JSON.stringify(sumber));
+
+                target.length = 0;
+                for (const item of salinan) {
+                    target.push(item);
+                }
+
+                if (JSON.stringify(target) !== JSON.stringify(sumber)) {
+                    throw new Error(
+                        "Verifikasi array gagal: " + data[0]
+                    );
+                }
+            }
+
+            arrayPulihBBCS = true;
+        } catch (error) {
+            console.error("Pemulihan array gagal:", error);
+        }
+
+        try {
+            const cetakLamaBBCS =
+                snapshotSimpanPinjamanBBCS.dataCetakSebelumnya;
+
+            if (cetakLamaBBCS === null) {
+                localStorage.removeItem("dataCetak");
+            } else {
+                localStorage.setItem("dataCetak", cetakLamaBBCS);
+            }
+
+            cetakPulihBBCS =
+                localStorage.getItem("dataCetak") === cetakLamaBBCS;
+        } catch (error) {
+            console.error("Pemulihan dataCetak gagal:", error);
+        }
+
+        try {
+            databasePulihBBCS = simpanDatabaseAman() === true;
+        } catch (error) {
+            console.error("Penyimpanan pemulihan gagal:", error);
+        }
+
+        try {
+            const daftarKunciStorageBBCS = [
+                ["anggota", "anggota"],
+                ["rekening", "rekening"],
+                ["simpanan", "simpanan"],
+                ["transaksi", "transaksi"],
+                ["pinjaman", "pinjaman"],
+                ["angsuran", "riwayatAngsuran"],
+                ["kas", "kas"]
+            ];
+
+            let semuaArrayStorageValidBBCS = true;
+
+            for (const pasangan of daftarKunciStorageBBCS) {
+                const kunci = pasangan[0];
+                const namaSnapshot = pasangan[1];
+                const mentah = localStorage.getItem(kunci);
+
+                if (mentah === null) {
+                    semuaArrayStorageValidBBCS = false;
+                    console.error("Kunci storage tidak ditemukan:", kunci);
+                    continue;
+                }
+
+                let tersimpan;
+
+                try {
+                    tersimpan = JSON.parse(mentah);
+                } catch (error) {
+                    semuaArrayStorageValidBBCS = false;
+                    console.error("JSON storage tidak valid:", kunci);
+                    continue;
+                }
+
+                const snapshot =
+                    snapshotSimpanPinjamanBBCS[namaSnapshot];
+
+                if (
+                    !Array.isArray(tersimpan) ||
+                    !Array.isArray(snapshot) ||
+                    JSON.stringify(tersimpan) !== JSON.stringify(snapshot)
+                ) {
+                    semuaArrayStorageValidBBCS = false;
+                    console.error("Isi storage tidak cocok:", kunci);
+                }
+            }
+
+            const cetakTersimpanBBCS =
+                localStorage.getItem("dataCetak");
+
+            const cetakSesuaiBBCS =
+                cetakTersimpanBBCS ===
+                snapshotSimpanPinjamanBBCS.dataCetakSebelumnya;
+
+            if (!cetakSesuaiBBCS) {
+                console.error("Isi dataCetak tidak cocok dengan snapshot.");
+            }
+
+            verifikasiStorageBBCS =
+                semuaArrayStorageValidBBCS && cetakSesuaiBBCS;
+        } catch (error) {
+            console.error("Pembacaan ulang storage gagal:", error);
+        }
+
+        if (
+            arrayPulihBBCS &&
+            cetakPulihBBCS &&
+            databasePulihBBCS &&
+            verifikasiStorageBBCS
+        ) {
+            alert(
+                alasan +
+                String.fromCharCode(10, 10) +
+                "Pemulihan terverifikasi melalui pembacaan ulang " +
+                "tujuh array dan dataCetak." +
+                String.fromCharCode(10, 10) +
+                "Periksa laporan sebelum melakukan transaksi berikutnya."
+            );
+        } else {
+            console.error("PEMULIHAN BELUM TERVERIFIKASI:", {
+                arrayPulihBBCS,
+                cetakPulihBBCS,
+                databasePulihBBCS,
+                verifikasiStorageBBCS
+            });
+
+            alert(
+                alasan +
+                String.fromCharCode(10, 10) +
+                "PEMULIHAN BELUM TERVERIFIKASI." +
+                String.fromCharCode(10, 10) +
+                "JANGAN ulangi pencairan atau transaksi." +
+                String.fromCharCode(10, 10) +
+                "Periksa anggota, rekening, simpanan, transaksi, " +
+                "pinjaman, angsuran, kas, dan dataCetak."
+            );
+        }
+    }
+
+
     // SIMPAN DATA CETAK
     // =====================================
 
-    localStorage.setItem(
-        "dataCetak",
-        JSON.stringify(
-            dataCetak
-        )
-    );
+    try {
+        localStorage.setItem(
+            "dataCetak",
+            JSON.stringify(dataCetak)
+        );
+    } catch (error) {
+        console.error(
+            "Penyimpanan dataCetak gagal:",
+            error
+        );
 
+        pulihkanPinjamanSetelahGagalBBCS(
+            "Penyimpanan data cetak gagal."
+        );
 
-    // =====================================
-    // SINKRONISASI
-    // =====================================
-
-    if(
-        typeof sinkronSemuaData ===
-        "function"
-    ){
-
-        sinkronSemuaData();
-
+        return;
     }
 
 
     // =====================================
-    // SIMPAN DATABASE
+    // SINKRONISASI DAN VALIDASI HASIL
     // =====================================
 
-    simpanDatabaseAman();
+    let hasilSinkronisasiPinjamanBBCS = null;
+
+    try {
+        if (
+            typeof sinkronSemuaData !== "function"
+        ) {
+            throw new Error(
+                "Fungsi sinkronSemuaData tidak tersedia."
+            );
+        }
+
+        hasilSinkronisasiPinjamanBBCS =
+            sinkronSemuaData();
+    } catch (error) {
+        console.error(
+            "Sinkronisasi pinjaman gagal:",
+            error
+        );
+    }
+
+    if (hasilSinkronisasiPinjamanBBCS !== true) {
+        pulihkanPinjamanSetelahGagalBBCS(
+            "Sinkronisasi data pinjaman gagal."
+        );
+
+        return;
+    }
 
 
     // =====================================
+    // SIMPAN DATABASE DAN PERIKSA HASIL
+    // =====================================
+
+    let simpanAkhirPinjamanBBCS = false;
+
+    try {
+        simpanAkhirPinjamanBBCS =
+            simpanDatabaseAman() === true;
+    } catch (error) {
+        console.error(
+            "Penyimpanan akhir pinjaman melempar kesalahan:",
+            error
+        );
+
+        simpanAkhirPinjamanBBCS = false;
+    }
+
+    if (simpanAkhirPinjamanBBCS !== true) {
+        console.error(
+            "Penyimpanan akhir pinjaman gagal. " +
+            "Memulai upaya pemulihan snapshot."
+        );
+
+        pulihkanPinjamanSetelahGagalBBCS(
+            "Penyimpanan akhir database pinjaman gagal."
+        );
+
+        return;
+    }
+
+
+    // =====================================
+    console.log(
+        "Transaksi + Kas Pinjaman berhasil dicatat dan " +
+        "penyimpanan akhir berhasil dikonfirmasi."
+    );
+
     // TAMPIL DATA PINJAMAN
     // =====================================
 
@@ -875,179 +1367,114 @@ if(
 
 function tampilPinjaman(){
 
-    let tempat =
-        document.getElementById(
-            "daftarPinjaman"
+    const tempat = document.getElementById("daftarPinjaman");
+
+    if (!tempat) {
+        return;
+    }
+
+    tempat.replaceChildren();
+
+    if (!Array.isArray(pinjaman) || pinjaman.length === 0) {
+        tempat.textContent = "Belum ada pinjaman";
+        return;
+    }
+
+    function tambahBaris(kartu, label, nilai) {
+        const baris = document.createElement("div");
+        const teks = document.createElement("span");
+
+        teks.textContent = label + " : ";
+        baris.appendChild(teks);
+
+        const isi = document.createElement("span");
+        isi.textContent = String(
+            nilai === null || nilai === undefined ? "" : nilai
         );
 
-
-    if(!tempat){
-
-        return;
-
+        baris.appendChild(isi);
+        kartu.appendChild(baris);
     }
 
-
-    if(
-        !Array.isArray(pinjaman)
-        ||
-        pinjaman.length === 0
-    ){
-
-        tempat.innerHTML =
-            "Belum ada pinjaman";
-
-        return;
-
+    function formatRupiahAman(nilai) {
+        return rupiah(nilai || 0);
     }
 
-
-    let isi = "";
-
-
-    pinjaman.forEach(function(item){
-
-        if(!item){
-
+    pinjaman.forEach(function(item) {
+        if (!item) {
             return;
-
         }
 
+        const kartu = document.createElement("div");
+        kartu.className = "info";
 
-        isi += `
+        const judul = document.createElement("b");
+        judul.textContent = String(item.id || "");
+        kartu.appendChild(judul);
 
-            <div class="info">
+        kartu.appendChild(document.createElement("br"));
+        kartu.appendChild(document.createElement("br"));
 
-                <b>
-                    ${item.id || ""}
-                </b>
+        tambahBaris(kartu, "ID Anggota",
+            item.idAnggota || item.anggota || "");
 
-                <br><br>
+        tambahBaris(kartu, "Nama",
+            item.namaAnggota || item.nama || "");
 
-                ID Anggota :
-                ${item.idAnggota ||
-                  item.anggota ||
-                  ""}
+        tambahBaris(kartu, "Tanggal Pinjaman",
+            item.tanggal || "");
 
-                <br>
+        tambahBaris(kartu, "Jumlah Pokok",
+            formatRupiahAman(item.jumlah));
 
-                Nama :
-                ${item.namaAnggota ||
-                  item.nama ||
-                  ""}
+        tambahBaris(kartu, "Tarif Administrasi",
+            String(item.tarifAdministrasi || 0) + "%");
 
-                <br>
+        tambahBaris(kartu, "Biaya Administrasi",
+            formatRupiahAman(item.biayaAdministrasi));
 
-                Tanggal Pinjaman :
-                ${item.tanggal || ""}
+        tambahBaris(kartu, "Uang Diterima Anggota",
+            formatRupiahAman(item.uangDiterima));
 
-                <br>
+        tambahBaris(kartu, "Kewajiban Anggota",
+            formatRupiahAman(item.jumlah));
 
-                Jumlah Pokok :
-                ${rupiah(
-                    item.jumlah || 0
-                )}
+        tambahBaris(kartu, "Sisa Pokok",
+            formatRupiahAman(item.sisaPokok));
 
-                <br>
+        tambahBaris(kartu, "Jasa Menurun",
+            String(item.jasa || 0) + "%");
 
-                Tarif Administrasi :
-                ${item.tarifAdministrasi || 0}%
+        tambahBaris(kartu, "Denda Tunggakan",
+            String(item.denda || 0) + "%");
 
-                <br>
+        tambahBaris(kartu, "Bulan Pinjaman",
+            item.bulanPinjaman || "");
 
-                Biaya Administrasi :
-                ${rupiah(
-                    item.biayaAdministrasi || 0
-                )}
+        tambahBaris(kartu, "Periode Pertama",
+            item.periodePertama || "");
 
-                <br>
+        tambahBaris(kartu, "Jasa Tertunggak",
+            formatRupiahAman(item.jasaTertunggak));
 
-                Uang Diterima Anggota :
-                ${rupiah(
-                    item.uangDiterima || 0
-                )}
+        tambahBaris(kartu, "Denda Tertunggak",
+            formatRupiahAman(item.dendaTertunggak));
 
-                <br>
+        tambahBaris(kartu, "Bulan Tertunggak",
+            item.bulanTertunggak || 0);
 
-                Kewajiban Anggota :
-                ${rupiah(
-                    item.jumlah || 0
-                )}
+        tambahBaris(kartu, "Wajib Bayar",
+            item.wajibBayar ? "YA" : "TIDAK");
 
-                <br>
+        tambahBaris(kartu, "Status",
+            item.status || "");
 
-                Sisa Pokok :
-                ${rupiah(
-                    item.sisaPokok || 0
-                )}
-
-                <br>
-
-                Jasa Menurun :
-                ${item.jasa || 0}%
-
-                <br>
-
-                Denda Tunggakan :
-                ${item.denda || 0}%
-
-                <br>
-
-                Bulan Pinjaman :
-                ${item.bulanPinjaman || ""}
-
-                <br>
-
-                Periode Pertama :
-                ${item.periodePertama || ""}
-
-                <br>
-
-                Jasa Tertunggak :
-                ${rupiah(
-                    item.jasaTertunggak || 0
-                )}
-
-                <br>
-
-                Denda Tertunggak :
-                ${rupiah(
-                    item.dendaTertunggak || 0
-                )}
-
-                <br>
-
-                Bulan Tertunggak :
-                ${item.bulanTertunggak || 0}
-
-                <br>
-
-                Wajib Bayar :
-                ${
-                    item.wajibBayar
-                    ? "YA"
-                    : "TIDAK"
-                }
-
-                <br>
-
-                Status :
-                ${item.status || ""}
-
-            </div>
-
-        `;
-
+        tempat.appendChild(kartu);
+        tempat.appendChild(document.createElement("hr"));
     });
-
-
-    tempat.innerHTML =
-        isi;
-
 }
 
 
-// =====================================
 // CEK MODUL
 // =====================================
 

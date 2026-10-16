@@ -19,7 +19,7 @@ console.log(
 //
 // =====================================
 
-window.tarifAdministrasiPinjamanBBCS = 1;
+window.tarifAdministrasiPinjamanBBCS = 2;
 
 
 // =====================================
